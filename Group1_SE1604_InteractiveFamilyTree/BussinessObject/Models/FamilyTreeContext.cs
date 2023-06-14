@@ -46,6 +46,8 @@ namespace BussinessObject.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.Date).HasColumnType("date");
+
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });
 
@@ -103,6 +105,8 @@ namespace BussinessObject.Models
                 entity.ToTable("EventReport");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Date).HasColumnType("date");
 
                 entity.Property(e => e.EventId).HasColumnName("EventID");
             });
@@ -214,7 +218,7 @@ namespace BussinessObject.Models
             modelBuilder.Entity<UserJoin>(entity =>
             {
                 entity.HasKey(e => new { e.EventId, e.UserId })
-                    .HasName("PK__UserJoin__A83C44BA78B7B8E8");
+                    .HasName("PK__UserJoin__A83C44BA2E637C1A");
 
                 entity.ToTable("UserJoin");
 

@@ -10,5 +10,6 @@ namespace BussinessObject.Models
         public int Id { get; set; }
         public int EventId { get; set; }
         public int? Status { get; set; }
+        public DateTime? Date { get; set; }
     }
 }
