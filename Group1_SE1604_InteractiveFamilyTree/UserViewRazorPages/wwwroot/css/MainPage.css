@@ -1,0 +1,53 @@
+﻿/* MainPage.css */
+
+/* Styles for the main heading */
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Styles for the user links */
+.user-link {
+    color: blue;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+    .user-link:hover {
+        text-decoration: underline;
+    }
+
+/* Styles for the user details */
+.user-details {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Styles for the child list */
+.child-list {
+    margin-left: 20px;
+    list-style-type: none;
+}
+
+    /* Styles for the user list items */
+    .child-list li {
+        margin-bottom: 10px;
+    }
+
+/* Styles for the partner details */
+.partner-details {
+    font-style: italic;
+    color: #666;
+}
+
+/* Styles for the detail link */
+.detail-link {
+    color: green;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+    .detail-link:hover {
+        text-decoration: underline;
+    }
