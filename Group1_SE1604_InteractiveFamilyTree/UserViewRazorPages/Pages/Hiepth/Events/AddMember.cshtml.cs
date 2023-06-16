@@ -70,7 +70,7 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
                 return NotFound();
             }
             List<int> userIds = AddedUsers.Select(x => x.UserId).ToList();
-            eventRepository.addUsersToEvent(int.Parse(eventId), userIds);
+            eventRepository.AddUsersToEvent(int.Parse(eventId), userIds);
             return RedirectToPage("ListAll");
         }
     }

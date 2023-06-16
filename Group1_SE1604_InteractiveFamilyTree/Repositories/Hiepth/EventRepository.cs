@@ -10,7 +10,7 @@ namespace Repositories.Hiepth
 {
     public class EventRepository : IEventRepository
     {
-        public void addUsersToEvent(int eventId, List<int> userIds) => EventDAO.Instance.addUsersToEvent(eventId, userIds);
+        public void AddUsersToEvent(int eventId, List<int> userIds) => EventDAO.Instance.AddUsersToEvent(eventId, userIds);
 
         public List<Event> GetAll() => EventDAO.Instance.GetEventList();
 
@@ -22,12 +22,14 @@ namespace Repositories.Hiepth
 
         public int GetUnseenEventCountByUserId(int userId) => EventDAO.Instance.GetUnseenEventCountByUserId(userId);
 
-        public void removeUserFromEvent(int eventId, int userId) => EventDAO.Instance.removeUserFromEvent(eventId, userId);
+        public List<User> GetUsersByEventId(int eventId) => EventDAO.Instance.GetUsersByEventId(eventId);
 
-        public void requestToJoinEvent(int userId, int eventId) => EventDAO.Instance.requestToJoinEvent(userId, eventId);
+        public void RemoveUserFromEvent(int eventId, int userId) => EventDAO.Instance.RemoveUserFromEvent(eventId, userId);
+
+        public void RequestToJoinEvent(int userId, int eventId) => EventDAO.Instance.RequestToJoinEvent(userId, eventId);
 
         public int Save(Event entity) => EventDAO.Instance.AddEvent(entity);
 
-        public void updateUserJoin(UserJoin userJoin) => EventDAO.Instance.updateUserJoin(userJoin);
+        public void UpdateUserJoin(UserJoin userJoin) => EventDAO.Instance.UpdateUserJoin(userJoin);
     }
 }

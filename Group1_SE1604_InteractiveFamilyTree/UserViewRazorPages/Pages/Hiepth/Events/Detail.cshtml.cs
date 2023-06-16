@@ -7,18 +7,18 @@ using System.Collections.Generic;
 namespace UserViewRazorPages.Pages.Hiepth.Events
 {
     [BindProperties]
-    public class ListAllModel : PageModel
+    public class DetailModel : PageModel
     {
         private readonly IEventRepository eventRepository = new EventRepository();
 
-        public IList<Event> Events { get; set; }
-        public int UnseenEventCount { get; set; }
+        public List<User> Users { get; set; }
 
-        public IActionResult OnGet()
+        public Event Event { get; set; }
+
+        public void OnGet(int id)
         {
-            UnseenEventCount = eventRepository.GetUnseenEventCountByUserId(1);
-            Events = eventRepository.GetAll();
-            return Page();
+            Event = eventRepository.GetByEventId(id);
+            Users = eventRepository.GetUsersByEventId(id);
         }
     }
 }

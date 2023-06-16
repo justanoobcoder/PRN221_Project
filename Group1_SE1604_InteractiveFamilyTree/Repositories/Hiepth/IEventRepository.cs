@@ -15,9 +15,10 @@ namespace Repositories.Hiepth
         Event GetByEventId(int eventId);
         int Save(Event entity);
         int GetUnseenEventCountByUserId(int userId);
-        void addUsersToEvent(int eventId, List<int> userIds);
-        void requestToJoinEvent(int userId, int eventId);
-        void removeUserFromEvent(int eventId, int userId);
-        void updateUserJoin(UserJoin userJoin);
+        void AddUsersToEvent(int eventId, List<int> userIds);
+        void RequestToJoinEvent(int userId, int eventId);
+        void RemoveUserFromEvent(int eventId, int userId);
+        void UpdateUserJoin(UserJoin userJoin);
+        List<User> GetUsersByEventId(int eventId);
     }
 }

@@ -66,6 +66,22 @@ namespace DataAccesObject.DAO
             return events;
         }
 
+        public List<User> GetUsersByEventId(int eventId)
+        {
+            try
+            {
+                List<UserJoin> userJoins = context.Events
+                    .Include(e => e.UserJoins)
+                    .Where(e => e.EventId == eventId)
+                    .Select(e => e.UserJoins).SingleOrDefault().ToList();
+                return userJoins.Select(u => u.User).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public Event GetByEventId(int eventId)
         {
             try
@@ -82,8 +98,10 @@ namespace DataAccesObject.DAO
         {
             try
             {
-                List<Event> events = (List<Event>)(from e in context.UserJoins.Include(e => e.Event).Where(e => e.UserId == userId)
-                                     select e.Event);
+                List<Event> events = context.UserJoins
+                    .Include(e => e.Event)
+                    .Where(e => e.UserId == userId)
+                    .Select(e => e.Event).ToList();
                 return events;
             }
             catch (Exception ex)
@@ -104,7 +122,7 @@ namespace DataAccesObject.DAO
             }
         }
 
-        public void addUsersToEvent(int eventId, List<int> userIds)
+        public void AddUsersToEvent(int eventId, List<int> userIds)
         {
             try
             {
@@ -127,7 +145,7 @@ namespace DataAccesObject.DAO
             }
         }
 
-        public void requestToJoinEvent(int userId, int eventId)
+        public void RequestToJoinEvent(int userId, int eventId)
         {
             try
             {
@@ -147,7 +165,7 @@ namespace DataAccesObject.DAO
             }
         }
 
-        public void removeUserFromEvent(int eventId, int userId)
+        public void RemoveUserFromEvent(int eventId, int userId)
         {
             try
             {
@@ -161,7 +179,7 @@ namespace DataAccesObject.DAO
             }
         }
 
-        public void updateUserJoin(UserJoin userJoin)
+        public void UpdateUserJoin(UserJoin userJoin)
         {
             try
             {
