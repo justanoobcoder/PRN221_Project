@@ -32,7 +32,7 @@ namespace BussinessObject.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server =(local); database = FamilyTree;uid=sa;pwd=123456;TrustServerCertificate=True");
+                optionsBuilder.UseSqlServer("server =(local); database = FamilyTree;uid=sa;pwd=12345;TrustServerCertificate=True");
             }
         }
 
@@ -98,6 +98,11 @@ namespace BussinessObject.Models
                 entity.Property(e => e.Status)
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Creator)
+                    .WithMany(p => p.Events)
+                    .HasForeignKey(d => d.CreatorId)
+                    .HasConstraintName("FK_Event_User");
             });
 
             modelBuilder.Entity<EventReport>(entity =>
@@ -218,7 +223,7 @@ namespace BussinessObject.Models
             modelBuilder.Entity<UserJoin>(entity =>
             {
                 entity.HasKey(e => new { e.EventId, e.UserId })
-                    .HasName("PK__UserJoin__A83C44BA2E637C1A");
+                    .HasName("PK__UserJoin__A83C44BA9C28B8DE");
 
                 entity.ToTable("UserJoin");
 

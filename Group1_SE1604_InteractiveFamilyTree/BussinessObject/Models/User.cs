@@ -9,6 +9,7 @@ namespace BussinessObject.Models
     {
         public User()
         {
+            Events = new HashSet<Event>();
             RelationshipUserId1Navigations = new HashSet<Relationship>();
             RelationshipUserId2Navigations = new HashSet<Relationship>();
             UserJoins = new HashSet<UserJoin>();
@@ -26,6 +27,7 @@ namespace BussinessObject.Models
         public string Status { get; set; }
 
         public virtual Family Family { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<Relationship> RelationshipUserId1Navigations { get; set; }
         public virtual ICollection<Relationship> RelationshipUserId2Navigations { get; set; }
         public virtual ICollection<UserJoin> UserJoins { get; set; }
