@@ -55,16 +55,17 @@
                     <th scope="col">Email</th>
                     <th scope="col">Gender</th>
                     <th scope="col">Phone Number</th>
+                    <th scope="col">User Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Users)
+                @foreach (var item in Model.Users.Zip(Model.UserStatus, Tuple.Create))
                 {
                     <tr>
-                        <td>@item.UserId</td>
-                        <td>@item.Name</td>
-                        <td>@item.Email</td>
-                        @if (@item.Gender == true)
+                        <td>@item.Item1.UserId</td>
+                        <td>@item.Item1.Name</td>
+                        <td>@item.Item1.Email</td>
+                        @if (@item.Item1.Gender == true)
                         {
                             <td>Male</td>
                         }
@@ -72,7 +73,8 @@
                         {
                             <td>Female</td>
                         }
-                        <td>@item.PhoneNumber</td>
+                        <td>@item.Item1.PhoneNumber</td>
+                        <td>@item.Item2</td>
                     </tr>
                 }
             </tbody>

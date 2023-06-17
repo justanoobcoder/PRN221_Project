@@ -1,5 +1,6 @@
 ﻿@page
 @model UserViewRazorPages.Pages.Hiepth.Events.MyEventsModel
+@using DataAcessObject.Common
 @{
     ViewData["Title"] = "My Events";
 }
@@ -16,22 +17,54 @@
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
             <th scope="col">Status</th>
+            <th scope="col">My Status</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Events)
+        @foreach (var item in Model.Events.Zip(Model.UserStatus, Tuple.Create))
         {
-            <tr>
-                <td>@item.EventId</td>
-                <td>@item.EventName</td>
-                <td>@item.Creator.Name</td>
-                <td>@item.Information</td>
-                <td>@item.StartDate</td>
-                <td>@item.EndDate</td>
-                <td>@item.Status</td>
-                <td><a asp-page="Detail" asp-route-id="@item.EventId" class="btn btn-outline-primary">Detail</a></td>
+            <tr data-href="Detail?id=@item.Item1.EventId" style="cursor: pointer;">
+                <td>@item.Item1.EventId</td>
+                <td>@item.Item1.EventName</td>
+                <td>@item.Item1.Creator.Name</td>
+                <td>@item.Item1.Information</td>
+                <td>@item.Item1.StartDate</td>
+                <td>@item.Item1.EndDate</td>
+                <td>@item.Item1.Status</td>
+                <td>@item.Item2</td>
+                <td style="display: flex;">
+                    @if (item.Item1.Status.Equals(EventStatus.Waiting.ToString()))
+                    {
+                        @if (item.Item2.Equals(UserEventStatus.Pending.ToString()) || item.Item2.Equals(UserEventStatus.Denied.ToString()))
+                        {
+                            <form method="post" asp-page-handler="AcceptEvent">
+                                <input type="hidden" name="eventId" value="@item.Item1.EventId" />
+                                <button class="btn btn-primary">Accept</button>
+                            </form>
+                        }
+                        @if (item.Item2.Equals(UserEventStatus.Pending.ToString()) || item.Item2.Equals(UserEventStatus.Accepted.ToString()))
+                        {
+                            <form method="post" asp-page-handler="DenyEvent">
+                                <input type="hidden" name="eventId" value="@item.Item1.EventId" />
+                                <button class="btn btn-danger">Deny</button>
+                            </form>
+                        }
+                    }
+                </td>
+                @*<td><a asp-page="Detail" asp-route-id="@item.Item1.EventId" class="btn btn-outline-primary">Detail</a></td>*@
             </tr>
         }
     </tbody>
 </table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const rows = document.querySelectorAll("tr[data-href]");
+        rows.forEach(row => {
+            row.addEventListener("click", () => {
+                window.location.href = row.dataset.href;
+            })
+        });
+    });
+</script>

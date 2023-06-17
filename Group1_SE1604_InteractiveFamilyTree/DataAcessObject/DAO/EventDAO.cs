@@ -53,10 +53,14 @@ namespace DataAccesObject.DAO
 
         public List<Event> GetFamilyEvents(int familyId)
         {
-            List<Event> events = null;
+            List<Event> events = new List<Event>();
             try
             {
-                events = context.Events.Where(od => UserDAO.Instance.getFamilyId(od.CreatorId.GetValueOrDefault()) == familyId).ToList();
+                List<User> users = context.Users
+                    .Include(u => u.Events)
+                    .Where(u => u.FamilyId == familyId && u.Password != null)
+                    .ToList();
+                users.ForEach(u => events.AddRange(u.Events));
             }
             catch (Exception ex)
             {
@@ -74,7 +78,9 @@ namespace DataAccesObject.DAO
                     .Include(e => e.UserJoins)
                     .Where(e => e.EventId == eventId)
                     .Select(e => e.UserJoins).SingleOrDefault().ToList();
-                return userJoins.Select(u => u.User).ToList();
+                List<User> users = new List<User>();
+                userJoins.ForEach(u => users.Add(context.Users.Where(user => user.UserId == u.UserId).SingleOrDefault()));
+                return users;
             }
             catch (Exception ex)
             {
@@ -103,6 +109,20 @@ namespace DataAccesObject.DAO
                     .Where(e => e.UserId == userId)
                     .Select(e => e.Event).ToList();
                 return events;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public UserJoin GetUserJoinByUserIdAndEventId(int userId, int eventId)
+        {
+            try
+            {
+                return context.UserJoins
+                    .Where(u => u.UserId == userId && u.EventId == eventId)
+                    .SingleOrDefault();
             }
             catch (Exception ex)
             {

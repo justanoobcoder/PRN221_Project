@@ -20,5 +20,6 @@ namespace Repositories.Hiepth
         void RemoveUserFromEvent(int eventId, int userId);
         void UpdateUserJoin(UserJoin userJoin);
         List<User> GetUsersByEventId(int eventId);
+        UserJoin GetUserJoinByUserIdAndEventId(int userId, int eventId);
     }
 }
