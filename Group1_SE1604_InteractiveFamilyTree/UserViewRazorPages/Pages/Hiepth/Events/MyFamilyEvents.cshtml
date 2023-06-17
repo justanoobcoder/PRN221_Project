@@ -20,7 +20,7 @@
     <tbody>
         @foreach (var item in Model.Events)
         {
-            <tr>
+            <tr data-href="Detail?id=@item.EventId" style="cursor: pointer;">
                 <td>@item.EventId</td>
                 <td>@item.EventName</td>
                 <td>@item.Creator.Name</td>
@@ -32,3 +32,14 @@
         }
     </tbody>
 </table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const rows = document.querySelectorAll("tr[data-href]");
+        rows.forEach(row => {
+            row.addEventListener("click", () => {
+                window.location.href = row.dataset.href;
+            })
+        });
+    });
+</script>

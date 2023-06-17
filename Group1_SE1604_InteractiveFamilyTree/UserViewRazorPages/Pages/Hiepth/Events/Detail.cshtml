@@ -44,6 +44,14 @@
             @Html.DisplayFor(model => model.Event.Status)
         </dd>
     </dl>
+    @if (Model.CanJoin)
+    {
+
+        <form method="post" asp-page-handler="RequestToJoin">
+            <input type="hidden" name="eventId" value="@Model.Event.EventId"/>
+            <button class="btn btn-primary">Join</button>
+        </form>
+    }
     @if (Model.Users.Count > 0)
     {
         <h3>Members</h3>

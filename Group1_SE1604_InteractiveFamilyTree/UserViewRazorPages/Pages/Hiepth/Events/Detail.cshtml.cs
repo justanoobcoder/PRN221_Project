@@ -15,12 +15,20 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
         public List<string> UserStatus { get; set; } = new List<string>();
 
         public Event Event { get; set; }
+        public bool CanJoin { get; set; } = false;
 
         public void OnGet(int id)
         {
             UserJoin uj = eventRepository.GetUserJoinByUserIdAndEventId(1, id);
-            uj.View = 1;
-            eventRepository.UpdateUserJoin(uj);
+            if (uj == null)
+            {
+                CanJoin = true;
+            }
+            else if (uj != null && uj.View == 0)
+            {
+                uj.View = 1;
+                eventRepository.UpdateUserJoin(uj);
+            }
             Event = eventRepository.GetByEventId(id);
             Users = eventRepository.GetUsersByEventId(id);
             foreach (var u in Users)
@@ -28,6 +36,12 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
                 UserJoin userJoin = eventRepository.GetUserJoinByUserIdAndEventId(u.UserId, id);
                 UserStatus.Add(userJoin.Status);
             }
+        }
+
+        public IActionResult OnPostRequestToJoin(string eventId)
+        {
+            eventRepository.RequestToJoinEvent(1, int.Parse(eventId));
+            return RedirectToPage("Detail", new { id = int.Parse(eventId) });
         }
     }
 }
