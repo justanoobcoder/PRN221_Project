@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Repositories.Dangptm;
 
 namespace UserViewRazorPages
 {
@@ -23,7 +24,14 @@ namespace UserViewRazorPages
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSession();
+            services.AddScoped<IFamilyRepository, FamilyRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddRazorPages();
+            services.AddRazorPages().AddRazorPagesOptions(options =>
+            {
+                options.Conventions.AddPageRoute("/Dangptm/Login", "");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,7 +50,7 @@ namespace UserViewRazorPages
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();

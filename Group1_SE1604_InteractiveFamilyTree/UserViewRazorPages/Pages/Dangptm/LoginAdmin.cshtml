@@ -1,0 +1,33 @@
+﻿@page
+@model UserViewRazorPages.Pages.Dangptm.LoginAdminModel
+@{
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center">Login</h1>
+            <form method="post" class="my-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Admin.Email" class="control-label">Email</label>
+                    <input asp-for="Admin.Email" class="form-control" required="true" />
+                    <span asp-validation-for="Admin.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Admin.Password" class="control-label">Password</label>
+                    <input asp-for="Admin.Password" class="form-control" required="true" type="password" />
+                    <span asp-validation-for="Admin.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group text-danger">
+                    @ViewData["notification"]
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+            <div class="text-center">
+                <p>Are you  user? <a asp-page="./Login">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
