@@ -6,39 +6,28 @@
     <title>@ViewData["Title"] - UserViewRazorPages</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="~/css/normalize.css" />
+    <link rel="stylesheet" href="~/css/sb-admin-2.css" />
+    <link rel="stylesheet" href="~/css/sb-admin-2.min.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">UserViewRazorPages</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+    </header>                     
+    <div id="wrapper" class="row">
+        <div class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion col-md-4 text-center justify-content-center" id="accordionSidebar">
+            <div class="sidebar-brand d-flex align-items-center justify-content-center" style="font-size:30px" >FAMILY TREE</div>
+            <div class="sidebar-brand d-flex align-items-center justify-content-center text-secondary" style="font-size:25px">EMPOWERING FAMILY CONNECTIONS</div>
+        </div>
+        <div id="content-wrapper" class="d-flex col-md-8 text-center justify-content-center">
+            <div id="content" class="d-flex align-items-center justify-content-center">
+                @RenderBody()
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - UserViewRazorPages - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
+
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

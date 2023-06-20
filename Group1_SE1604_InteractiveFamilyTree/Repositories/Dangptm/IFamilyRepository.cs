@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BussinessObject.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Repositories.Dangptm
 {
-    internal class FileName
+    public interface IFamilyRepository
     {
+        public List<Family> GetFamilieList();
     }
 }
