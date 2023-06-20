@@ -100,7 +100,7 @@ namespace DataAcessObject.Bodt
 
             try
             {
-                customer = context.Users.SingleOrDefault(u => u.Email.ToLower().Equals(email.ToLower()));
+                customer = context.Users.FirstOrDefault(u => u.Email.ToLower().Equals(email.ToLower()));
             }
             catch (Exception ex)
             {
@@ -117,7 +117,7 @@ namespace DataAcessObject.Bodt
             }
             try
             {
-                if (GetUser(user.UserId) == null && GetUserByEmail(user.Email) == null)
+                if (GetUser(user.UserId) == null)
                 {
                     context.Users.Add(user);
                     context.SaveChanges();
@@ -228,8 +228,56 @@ namespace DataAcessObject.Bodt
             }
             return count;
         }
-    }
+        public List<User> getMarriedUser(int FamilyId)
+        {
+            List<User> List;
+            try
+            {
+                var query = from user in context.Users
+                            join rel in context.Relationships
+                                on user.UserId equals rel.UserId1 into userRelationships1
+                            from ur1 in userRelationships1.DefaultIfEmpty()
+                            join rel in context.Relationships
+                                on user.UserId equals rel.UserId2 into userRelationships2
+                            from ur2 in userRelationships2.DefaultIfEmpty()
+                            where ((ur1 != null && ur1.RelationshipDetailId == 3) ||
+                                  (ur2 != null && ur2.RelationshipDetailId == 3)) && user.FamilyId == 1
+                            select user;
 
+
+                List = query.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return List;
+        }
+        public List<User> getUnavailable(int FamilyId)
+        {
+            List<User> List;
+            try
+            {
+                var query = from user in context.Users
+                            join rel in context.Relationships
+                                on user.UserId equals rel.UserId2 into userRelationships
+                            from ur in userRelationships.DefaultIfEmpty()
+                            where ur != null && ur.RelationshipDetailId == 3 && user.FamilyId == 1
+                            select user;
+
+
+                List = query.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return List;
+        }
+    }
+    
 }
 
 

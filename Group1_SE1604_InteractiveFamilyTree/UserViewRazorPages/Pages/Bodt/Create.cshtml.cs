@@ -6,39 +6,72 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BussinessObject.Models;
+using Repositories.Bodt.Imple;
+using Repositories.Bodt;
+using Microsoft.CodeAnalysis.Options;
 
 namespace UserViewRazorPages.Pages.Bodt
 {
     public class CreateModel : PageModel
     {
-        private readonly BussinessObject.Models.FamilyTreeContext _context;
-
-        public CreateModel(BussinessObject.Models.FamilyTreeContext context)
+        IRelationshipRepository relationshipRepository = new RelationshipRepository();
+        IUserRepository userRepository = new UserRepository();
+        [BindProperty]
+        public int SelectedUserId { get; set; }
+        public List<User> users { get; set; }
+        [BindProperty]
+        public User User { get; set; }
+        [BindProperty]
+        public string SelectedOption { get; set; }
+        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+        public IActionResult OnGet(string option)
         {
-            _context = context;
-        }
-
-        public IActionResult OnGet()
-        {
-        ViewData["FamilyId"] = new SelectList(_context.Families, "FamilyId", "Address");
+            SelectedOption = option;
+            users = userRepository.GetUserListByFamilyId(1);
+            List<User> doNotIncludedUsers;
+            if (SelectedOption.Equals("Option1"))
+            {
+                doNotIncludedUsers = userRepository.getMarriedUser(1);
+                
+            }
+            else
+            {
+                doNotIncludedUsers = userRepository.getUnavailable(1);
+            }
+            foreach (var user in users.ToList())
+            {
+                foreach (var user2 in doNotIncludedUsers.ToList())
+                {
+                    if (user.UserId == user2.UserId)
+                    {
+                        users.Remove(user);
+                        doNotIncludedUsers.Remove(user2);
+                    }
+                }
+            }
             return Page();
         }
 
-        [BindProperty]
-        public User User { get; set; }
-
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
+            User.FamilyId = 1;
+            userRepository.AddUser(User);
+            Relationship relationship = new Relationship();
+            relationship.RelationshipId = relationshipRepository.GetNextRelationshipId();
+            relationship.UserId1 = SelectedUserId;
+            relationship.UserId2 = User.UserId;
+            if (SelectedOption.Equals("Option1"))
             {
-                return Page();
+                relationship.RelationshipDetailId = 3;
+                relationshipRepository.AddRelationship(relationship);
+            }
+            else
+            {
+                relationship.RelationshipDetailId = 1;
+                relationshipRepository.AddRelationship(relationship);
             }
 
-            _context.Users.Add(User);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Bodt/MainPage");
         }
     }
 }
