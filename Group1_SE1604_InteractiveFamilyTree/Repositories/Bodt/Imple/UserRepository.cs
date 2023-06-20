@@ -50,5 +50,11 @@ namespace Repositories.Bodt
         {
             return UserDAO.Instance.familyCount(familyId);  
         }
+        public List<User> getMarriedUser(int FamilyId)
+        { return UserDAO.Instance.getMarriedUser(FamilyId); }
+        public List<User> getUnavailable(int FamilyId)
+        {
+            return UserDAO.Instance.getUnavailable(FamilyId);
+        }
     }
 }

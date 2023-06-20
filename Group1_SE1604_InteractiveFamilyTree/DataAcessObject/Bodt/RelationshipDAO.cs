@@ -1,8 +1,10 @@
 ﻿using BussinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -83,6 +85,117 @@ namespace DataAcessObject.Bodt
                 throw new Exception(ex.Message);
             }
             return partner;
+        }
+        public int GetNextRelationshipId()
+        {
+            int nextRelationshipId = -1;
+
+            try
+            {
+                nextRelationshipId = context.Relationships.Max(u => u.RelationshipId) + 1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return nextRelationshipId;
+        }
+        public void AddRelationship(Relationship relationship)
+        {
+            try
+            {
+                context.Relationships.Add(relationship);
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<int> CheckRelatedUser(int userId)
+        {
+            List<int> relatedUser = new List<int>();
+            try
+            {
+                List<Relationship> relatedUserList = context.Relationships.Where(od => od.UserId1 == userId).ToList();
+                foreach (var relationship in relatedUserList)
+                {
+                    relatedUser.Add(relationship.UserId2);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return relatedUser;
+        }
+        public Relationship GetRelationship(int relationshipId)
+        {
+            Relationship relationship = null;
+            try
+            {
+                relationship = context.Relationships.FirstOrDefault(context => context.RelationshipId == relationshipId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return relationship;
+        }
+        public void Delete(int userId)
+        {
+            try
+            {
+                List<int> relationshipOfUser = GetRelationshipOfUser(userId);
+                List<int> relatedUser = new List<int>();
+                if (relationshipOfUser.Count > 0)
+                {
+                    foreach (var relationship in relationshipOfUser)
+                    {
+                        int user = GetRelationship(relationship).UserId2;
+                        if (!relatedUser.Contains(user))
+                        {
+                            relatedUser.Add(user);
+                        }
+                        context.Relationships.Remove(GetRelationship(relationship));
+                    }
+                    foreach (var user in relatedUser)
+                    {
+                        context.Users.Remove(UserDAO.Instance.GetUser(user));
+                    }
+                }
+                    List<Relationship> relationshipsToRemove = context.Relationships
+                        .Where(od => od.UserId1 == userId || od.UserId2 == userId)
+                        .ToList();
+                    foreach (Relationship relationshipToRemove in relationshipsToRemove)
+                    {
+                        context.Relationships.Remove(relationshipToRemove);
+                    }
+                    context.Users.Remove(UserDAO.Instance.GetUser(userId));
+                    context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<int> GetRelationshipOfUser(int userId)
+        {
+            List<int> relationshipIdList = new List<int>();
+            try
+            {
+                 List<Relationship> relationshipList = context.Relationships.Where(od => od.UserId1 == userId).ToList();
+                 foreach(var relationship in relationshipList)
+                 {
+                    relationshipIdList.Add(relationship.RelationshipId);
+                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return relationshipIdList;
         }
     }
 }

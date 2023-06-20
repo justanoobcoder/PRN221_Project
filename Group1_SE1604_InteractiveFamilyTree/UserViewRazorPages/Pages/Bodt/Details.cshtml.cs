@@ -16,7 +16,7 @@ namespace UserViewRazorPages.Pages.Bodt
         IUserRepository userRepository = new UserRepository();
         public User User { get; set; }
 
-        public IActionResult OnGetAsync(int id)
+        public IActionResult OnGet(int id)
         {
             User = userRepository.GetUser(id);
             return Page();

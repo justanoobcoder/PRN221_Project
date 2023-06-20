@@ -18,6 +18,7 @@ namespace UserViewRazorPages.Pages.Bodt
         public List<User> Users { get;set; }
         public int MainUser { get; set; }
         public User partnerOfMain { get; set; }
+
         public IActionResult OnGet()
         {
             int count = userRepository.familyCount(1);
@@ -25,6 +26,7 @@ namespace UserViewRazorPages.Pages.Bodt
             Users = userRepository.GetUserListByFamilyId(1);
             foreach (User user in Users)
             {
+                user.PartnerId = relationshipRepository.getPartner(user.UserId);
                 List<int> relationship = relationshipRepository.GetRelationship(user.UserId, 1);
                 if (relationship == null || relationship.Count == 0)
                     continue;
@@ -38,7 +40,6 @@ namespace UserViewRazorPages.Pages.Bodt
                     users.Add(userRepository.GetUser(relationship[i]));
                 }
                 user.Children = users;
-                user.PartnerId = relationshipRepository.getPartner(user.UserId);
             }
             if (Users[MainUser].PartnerId != 0)
             {

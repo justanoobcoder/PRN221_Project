@@ -27,5 +27,7 @@ namespace Repositories.Bodt.Imple
 
         public List<User> GetUserListByFamilyId(int familyId);
         public int familyCount(int familyId);
+        public List<User> getMarriedUser(int FamilyId);
+        public List<User> getUnavailable(int FamilyId);
     }
 }

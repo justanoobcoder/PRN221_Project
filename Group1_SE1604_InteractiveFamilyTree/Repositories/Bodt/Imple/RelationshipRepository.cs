@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccesObject.DAO;
+using BussinessObject.Models;
+
 namespace Repositories.Bodt.Imple
 {
     public class RelationshipRepository : IRelationshipRepository
@@ -22,5 +24,24 @@ namespace Repositories.Bodt.Imple
         {
             return RelationshipDAO.Instance.getPartner(userId);
         }
-    }
+        public void AddRelationship(Relationship relationship) => RelationshipDAO.Instance.AddRelationship(relationship);
+        public int GetNextRelationshipId()
+        {
+            return RelationshipDAO.Instance.GetNextRelationshipId();
+        }
+        public List<int> CheckRelatedUser(int userId)
+        {
+            return RelationshipDAO.Instance.CheckRelatedUser(userId);
+        }
+        public Relationship GetRelationship(int relationshipId)
+        {
+            return RelationshipDAO.Instance.GetRelationship(relationshipId);
+        }
+        public void Delete(int userId) => RelationshipDAO.Instance.Delete(userId);
+        public List<int> GetRelationshipOfUser(int userId)
+        {
+            return RelationshipDAO.Instance.GetRelationshipOfUser(userId);
+        }
+
+        }
 }
