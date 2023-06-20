@@ -1,0 +1,74 @@
+﻿@page
+@using BussinessObject.Models
+@using Microsoft.AspNetCore.Html
+@model UserViewRazorPages.Pages.Bodt.IndexModel
+
+@{
+    ViewData["Title"] = "User Tree";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<h1>User Tree</h1>
+
+@if (Model.Users != null && Model.Users.Count > 0)
+{
+    <div>
+        @foreach (var user in Model.Users)
+        {
+            @if (Model.Users.IndexOf(user) == @Model.MainUser){
+            <a>@user.Name</a>
+               <a asp-page="/Bodt/Details" asp-route-id="@user.UserId">Detail</a>
+                @if (@Model.partnerOfMain != null)
+                {
+                    <a> - @Model.partnerOfMain.Name</a>
+                    <a asp-page="/Bodt/Details" asp-route-id="@Model.partnerOfMain.UserId">Detail</a>
+                }
+            <br />
+                @if (user.Children == null || user.Children.Count ==0)
+                    continue;
+                else
+                    @RenderChildren(user.Children)
+            }
+        }
+    </div>
+}
+else
+{
+    <p>No users found.</p>
+}
+@functions {
+    public IHtmlContent RenderChildren(List<User> children)
+    {
+        var content = new System.Text.StringBuilder();
+        foreach (var child in children)
+        {
+            content.AppendLine("<li><br />");
+            content.AppendLine($"<a>{child.Name}</a>");
+            content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={child.UserId}'>Detail</a>");
+            // check for id of husband/wird
+            @if(child.PartnerId != 0){
+                @for (int i=0;i< Model.Users.Count;i++){
+                    if (child.PartnerId == Model.Users[i].UserId){
+
+                        content.AppendLine($"- <a >{Model.Users[i].Name}</a>");
+                        content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={child.PartnerId}'>Detail</a>");
+
+
+                        break;
+                    }
+                }
+                
+            }
+            //check if user has any children, if yes, continue render
+            if (child.Children != null && child.Children.Count > 0)
+            {
+                content.AppendLine("<ul>");
+                content.AppendLine(RenderChildren(child.Children).ToString());
+                content.AppendLine("</ul>");
+            }
+            content.AppendLine("</li>");
+        }
+        return new HtmlString(content.ToString());
+    }
+
+}
+<a asp-page="/Bodt/Edit" asp-route-id=1>Detail</a>

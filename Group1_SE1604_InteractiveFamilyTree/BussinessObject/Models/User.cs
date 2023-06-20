@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -29,5 +30,11 @@ namespace BussinessObject.Models
         public virtual ICollection<Relationship> RelationshipUserId1Navigations { get; set; }
         public virtual ICollection<Relationship> RelationshipUserId2Navigations { get; set; }
         public virtual ICollection<UserJoin> UserJoins { get; set; }
+
+        [NotMapped]
+        public virtual int PartnerId { get; set; }
+        [NotMapped]
+        public virtual List<User> Children { get; set; }
     }
 }
+ 

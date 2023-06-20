@@ -1,0 +1,65 @@
+﻿@page
+@model UserViewRazorPages.Pages.Bodt.DetailsModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Gender)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.User.Gender == true){
+                <a>Man</a>
+            }
+            else{
+                <a>Woman</a>
+            }
+
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.PhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.PhoneNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Birthday)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Birthday)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Code)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Code)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Status)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="/Bodt/MainPage">Back to List</a>
+</div>
