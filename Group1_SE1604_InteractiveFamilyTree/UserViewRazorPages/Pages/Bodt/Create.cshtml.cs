@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BussinessObject.Models;
 using Repositories.Bodt.Imple;
 using Repositories.Bodt;
-using Microsoft.CodeAnalysis.Options;
 
 namespace UserViewRazorPages.Pages.Bodt
 {
