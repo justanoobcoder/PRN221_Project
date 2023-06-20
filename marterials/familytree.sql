@@ -36,13 +36,11 @@ CREATE TABLE [dbo].[Admin](
 	[AdminID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
 CREATE TABLE [dbo].[EventReport](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[EventID] [int] NOT NULL,
-	[Status] [int] NULL,
-	[Date] [date] NULL, -- Added Date column
+	[Status][int] NULL,
  CONSTRAINT [PK_EventReport] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -51,17 +49,14 @@ CREATE TABLE [dbo].[EventReport](
 
 CREATE TABLE [dbo].[AccountReport](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[UserID] [int] NOT NULL,
-	[Status] [int] NULL,
-	[Date] [date] NULL, -- Added Date column
+	[UserID][int] NOT NULL,
+	[Status][int] NULL,
+
  CONSTRAINT [PK_AccountReport] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
-
-
-
 CREATE TABLE [dbo].[Family](
 	[FamilyID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](40) NOT NULL,
