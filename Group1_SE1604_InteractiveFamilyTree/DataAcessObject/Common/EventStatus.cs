@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Hiepth
+namespace DataAcessObject.Common
 {
-    internal class FileName
+    public enum EventStatus
     {
+        Waiting, Suppended, Ended, Deleted
     }
 }

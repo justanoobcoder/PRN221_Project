@@ -98,6 +98,11 @@ namespace BussinessObject.Models
                 entity.Property(e => e.Status)
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Creator)
+                    .WithMany(p => p.Events)
+                    .HasForeignKey(d => d.CreatorId)
+                    .HasConstraintName("FK_Event_User");
             });
 
             modelBuilder.Entity<EventReport>(entity =>
@@ -218,7 +223,7 @@ namespace BussinessObject.Models
             modelBuilder.Entity<UserJoin>(entity =>
             {
                 entity.HasKey(e => new { e.EventId, e.UserId })
-                    .HasName("PK__UserJoin__A83C44BA2E637C1A");
+                    .HasName("PK__UserJoin__A83C44BA9C28B8DE");
 
                 entity.ToTable("UserJoin");
 

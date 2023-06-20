@@ -1,7 +1,8 @@
 ﻿
 using BussinessObject.Models;
-using DataAcessObject.Bodt;
+using DataAcessObject.Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,8 +39,10 @@ namespace DataAccesObject.DAO
             try
             {
                 // Get From Database
-                events = context.Events.ToList();
-
+                events = context.Events
+                    .Include(e => e.Creator)
+                    .Where(e => !e.Status.Equals(EventStatus.Deleted.ToString()))
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -50,10 +53,14 @@ namespace DataAccesObject.DAO
 
         public List<Event> GetFamilyEvents(int familyId)
         {
-            List<Event> events = null;
+            List<Event> events = new List<Event>();
             try
             {
-                events = context.Events.Where(od => UserDAO.Instance.getFamilyId(od.CreatorId.GetValueOrDefault()) == familyId).ToList();
+                List<User> users = context.Users
+                    .Include(u => u.Events)
+                    .Where(u => u.FamilyId == familyId && u.Password != null)
+                    .ToList();
+                users.ForEach(u => events.AddRange(u.Events));
             }
             catch (Exception ex)
             {
@@ -61,6 +68,148 @@ namespace DataAccesObject.DAO
             }
 
             return events;
+        }
+
+        public List<User> GetUsersByEventId(int eventId)
+        {
+            try
+            {
+                List<UserJoin> userJoins = context.Events
+                    .Include(e => e.UserJoins)
+                    .Where(e => e.EventId == eventId)
+                    .Select(e => e.UserJoins).SingleOrDefault().ToList();
+                List<User> users = new List<User>();
+                userJoins.ForEach(u => users.Add(context.Users.Where(user => user.UserId == u.UserId).SingleOrDefault()));
+                return users;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Event GetByEventId(int eventId)
+        {
+            try
+            {
+                return context.Events.Include(e => e.Creator).Where(e => e.EventId == eventId).SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<Event> GetByUserId(int userId)
+        {
+            try
+            {
+                List<Event> events = context.UserJoins
+                    .Include(e => e.Event)
+                    .Where(e => e.UserId == userId)
+                    .Select(e => e.Event).ToList();
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public UserJoin GetUserJoinByUserIdAndEventId(int userId, int eventId)
+        {
+            try
+            {
+                return context.UserJoins
+                    .Where(u => u.UserId == userId && u.EventId == eventId)
+                    .SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public int GetUnseenEventCountByUserId(int userId)
+        {
+            try
+            {
+                return context.UserJoins.Count(e => e.UserId == userId && e.View == 0);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void AddUsersToEvent(int eventId, List<int> userIds)
+        {
+            try
+            {
+                foreach (int userId in userIds)
+                {
+                    UserJoin userJoin = new UserJoin
+                    {
+                        EventId = eventId,
+                        UserId = userId,
+                        Status = UserEventStatus.Pending.ToString(),
+                        View = 0
+                    };
+                    context.UserJoins.Add(userJoin);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void RequestToJoinEvent(int userId, int eventId)
+        {
+            try
+            {
+                UserJoin userJoin = new UserJoin
+                {
+                    EventId = eventId,
+                    UserId = userId,
+                    Status = UserEventStatus.Requested.ToString(),
+                    View = 1
+                };
+                context.UserJoins.Add(userJoin);
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void RemoveUserFromEvent(int eventId, int userId)
+        {
+            try
+            {
+                UserJoin userJoin = context.UserJoins.Where(e => e.EventId == eventId && e.UserId == userId).SingleOrDefault();
+                context.UserJoins.Remove(userJoin);
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void UpdateUserJoin(UserJoin userJoin)
+        {
+            try
+            {
+                context.Entry(userJoin).State = EntityState.Modified;
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public Event GetEvent(int eventId)
@@ -79,7 +228,7 @@ namespace DataAccesObject.DAO
             return ev;
         }
 
-        public void AddEvent(Event ev)
+        public int AddEvent(Event ev)
         {
             if (ev == null)
             {
@@ -91,6 +240,7 @@ namespace DataAccesObject.DAO
                 {
                     context.Events.Add(ev);
                     context.SaveChanges();
+                    return ev.EventId;
                 }
                 else
                 {
