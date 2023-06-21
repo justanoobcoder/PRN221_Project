@@ -18,6 +18,6 @@ namespace Repositories.Bodt.Imple
         public List<int> CheckRelatedUser(int userId);
         public Relationship GetRelationship(int relationshipId);
         public void Delete(int userId);
-        public List<int> GetRelationshipOfUser(int userId);
+        public bool CheckBelongUser(int userId);
     }
 }

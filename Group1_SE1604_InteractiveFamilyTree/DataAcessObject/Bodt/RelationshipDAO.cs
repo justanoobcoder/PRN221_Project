@@ -146,33 +146,18 @@ namespace DataAcessObject.Bodt
         public void Delete(int userId)
         {
             try
-            {
-                List<int> relationshipOfUser = GetRelationshipOfUser(userId);
-                List<int> relatedUser = new List<int>();
-                if (relationshipOfUser.Count > 0)
-                {
-                    foreach (var relationship in relationshipOfUser)
-                    {
-                        int user = GetRelationship(relationship).UserId2;
-                        if (!relatedUser.Contains(user))
-                        {
-                            relatedUser.Add(user);
-                        }
-                        context.Relationships.Remove(GetRelationship(relationship));
-                    }
-                    foreach (var user in relatedUser)
-                    {
-                        context.Users.Remove(UserDAO.Instance.GetUser(user));
-                    }
-                }
-                    List<Relationship> relationshipsToRemove = context.Relationships
-                        .Where(od => od.UserId1 == userId || od.UserId2 == userId)
-                        .ToList();
-                    foreach (Relationship relationshipToRemove in relationshipsToRemove)
-                    {
+            {           
+                    Relationship relationshipToRemove = context.Relationships
+                        .FirstOrDefault(od => od.UserId2 == userId);
                         context.Relationships.Remove(relationshipToRemove);
+                     List<UserJoin> UserJoinToRemove = context.UserJoins
+                        .Where(od => od.UserId == userId)
+                        .ToList();
+                    foreach (UserJoin userJoinToRemove in UserJoinToRemove)
+                    {
+                        context.UserJoins.Remove(userJoinToRemove);
                     }
-                    context.Users.Remove(UserDAO.Instance.GetUser(userId));
+                context.Users.Remove(UserDAO.Instance.GetUser(userId));
                     context.SaveChanges();
             }
             catch (Exception ex)
@@ -180,22 +165,19 @@ namespace DataAcessObject.Bodt
                 throw new Exception(ex.Message);
             }
         }
-        public List<int> GetRelationshipOfUser(int userId)
+        public bool CheckBelongUser(int userId)
         {
-            List<int> relationshipIdList = new List<int>();
             try
             {
-                 List<Relationship> relationshipList = context.Relationships.Where(od => od.UserId1 == userId).ToList();
-                 foreach(var relationship in relationshipList)
-                 {
-                    relationshipIdList.Add(relationship.RelationshipId);
-                 }
+                // Check if any relationship exists where UserId1 matches the given userId
+                bool hasRelationship = context.Relationships.Any(od => od.UserId1 == userId);
+                return hasRelationship;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            return relationshipIdList;
         }
+
     }
 }

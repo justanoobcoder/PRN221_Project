@@ -38,10 +38,10 @@ namespace Repositories.Bodt.Imple
             return RelationshipDAO.Instance.GetRelationship(relationshipId);
         }
         public void Delete(int userId) => RelationshipDAO.Instance.Delete(userId);
-        public List<int> GetRelationshipOfUser(int userId)
-        {
-            return RelationshipDAO.Instance.GetRelationshipOfUser(userId);
-        }
 
+        public bool CheckBelongUser(int userId)
+        {
+            return RelationshipDAO.Instance.CheckBelongUser(userId);
+        }
         }
 }

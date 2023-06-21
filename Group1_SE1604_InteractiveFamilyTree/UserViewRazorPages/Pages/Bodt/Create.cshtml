@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "_UserLayout";
 }
 
 <h1>Create</h1>
@@ -28,9 +29,12 @@
                 <span asp-validation-for="User.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="User.Gender" class="control-label"></label>
-                <input asp-for="User.Gender" class="form-control" />
-                <span asp-validation-for="User.Gender" class="text-danger"></span>
+                <label asp-for="User.Gender" class="control-label">Gender</label><br />
+                <label for="selectedGender">Male</label>
+                <input type="radio" id="option1" name="selectedGender" value="Male" checked>
+
+                <label for="selectedGender">Female</label>
+                <input type="radio" id="option1" name="selectedGender" value="Female">
             </div>
             <div class="form-group">
                 <label asp-for="User.PhoneNumber" class="control-label"></label>
