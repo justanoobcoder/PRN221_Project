@@ -30,11 +30,20 @@ namespace UserViewRazorPages.Pages
             }
             else
             {
-                User = user;
-                User.Code = Code;
-                HttpContext.Session.SetInt32("UserId", User.UserId);
-                ViewData["notification"] = "Ngon!";
-                return RedirectToPage("./UpdateUser");
+                if (user.Email == null)
+                {
+                    User = user;
+                    User.Code = Code;
+                    HttpContext.Session.SetInt32("UserId", User.UserId);
+                    ViewData["notification"] = "Ngon!";
+                    return RedirectToPage("./UpdateUser");
+                }
+                else
+                {
+                    ViewData["notification"] = "Account already has existed!";
+                    return Page();
+                }
+                
             }
 
         }
