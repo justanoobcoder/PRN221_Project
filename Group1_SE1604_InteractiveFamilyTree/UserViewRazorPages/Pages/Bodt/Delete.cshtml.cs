@@ -44,9 +44,17 @@ namespace UserViewRazorPages.Pages.Bodt
 
             if (User != null)
             {
-                relationshipRepository.Delete(id);
+                bool userCheck = relationshipRepository.CheckBelongUser(id);
+                if (!userCheck)
+                {
+                    relationshipRepository.Delete(id);
+                    TempData["notification"] = "Success!!!";
+                }
+                else
+                {
+                    TempData["notification"] = "Can not delete bacause there are users belong to this user!!!";
+                }
             }
-
             return RedirectToPage("/Bodt/MainPage");
         }
     }

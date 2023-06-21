@@ -8,18 +8,14 @@ namespace UserViewRazorPages.Pages.Dangptm
 {
     public class LoginModel : PageModel
     {
-        private readonly IUserRepository _userRepository;
-        public LoginModel(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
+        IUserRepository userRepository = new UserRepository();
 
         [BindProperty]
         public User User { get; set; } = default!;
 
         public IActionResult OnPost()
         {
-            User loginUser = _userRepository.Login(User.Email, User.Password);
+            User loginUser = userRepository.Login(User.Email, User.Password);
             if (loginUser == null)
             {
                 ViewData["notification"] = "Email or Password is wrong!";
@@ -29,7 +25,7 @@ namespace UserViewRazorPages.Pages.Dangptm
             {
                 int UserId = loginUser.UserId;
                 HttpContext.Session.SetInt32("UserId", UserId);
-                return Page();
+                return RedirectToPage("/Bodt/MainPage");
             }
 
         }

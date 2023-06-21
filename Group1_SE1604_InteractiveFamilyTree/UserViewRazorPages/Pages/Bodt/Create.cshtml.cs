@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BussinessObject.Models;
 using Repositories.Bodt.Imple;
 using Repositories.Bodt;
+using Microsoft.AspNetCore.Http;
 
 namespace UserViewRazorPages.Pages.Bodt
 {
@@ -22,11 +23,14 @@ namespace UserViewRazorPages.Pages.Bodt
         public User User { get; set; }
         [BindProperty]
         public string SelectedOption { get; set; }
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+        [BindProperty]
+        public string selectedGender { get; set; }
         public IActionResult OnGet(string option)
         {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            User loginUser = userRepository.GetUser(userId);
             SelectedOption = option;
-            users = userRepository.GetUserListByFamilyId(1);
+            users = userRepository.GetUserListByFamilyId(loginUser.FamilyId.GetValueOrDefault());
             List<User> doNotIncludedUsers;
             if (SelectedOption.Equals("Option1"))
             {
@@ -54,6 +58,7 @@ namespace UserViewRazorPages.Pages.Bodt
         public IActionResult OnPost()
         {
             User.FamilyId = 1;
+            User.Gender = (selectedGender == "Male") ? true : false;
             userRepository.AddUser(User);
             Relationship relationship = new Relationship();
             relationship.RelationshipId = relationshipRepository.GetNextRelationshipId();

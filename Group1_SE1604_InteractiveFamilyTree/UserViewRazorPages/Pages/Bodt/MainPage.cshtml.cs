@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using BussinessObject.Models;
 using Repositories.Bodt.Imple;
 using Repositories.Bodt;
+using RazorPage.ViewModels;
+using Microsoft.AspNetCore.Http;
+using System.Data;
+
 namespace UserViewRazorPages.Pages.Bodt
 {
     public class IndexModel : PageModel
@@ -21,9 +25,10 @@ namespace UserViewRazorPages.Pages.Bodt
 
         public IActionResult OnGet()
         {
-            int count = userRepository.familyCount(1);
-            MainUser = relationshipRepository.GetMainUser(1);
-            Users = userRepository.GetUserListByFamilyId(1);
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            User loginUser = userRepository.GetUser(userId);
+            MainUser = relationshipRepository.GetMainUser(loginUser.FamilyId.GetValueOrDefault());
+            Users = userRepository.GetUserListByFamilyId(loginUser.FamilyId.GetValueOrDefault());
             foreach (User user in Users)
             {
                 user.PartnerId = relationshipRepository.getPartner(user.UserId);

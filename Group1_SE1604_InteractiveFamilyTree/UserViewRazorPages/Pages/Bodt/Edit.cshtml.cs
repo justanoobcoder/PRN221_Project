@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BussinessObject.Models;
 using Repositories.Bodt.Imple;
 using Repositories.Bodt;
+using Microsoft.AspNetCore.Http;
 
 namespace UserViewRazorPages.Pages.Bodt
 {
@@ -17,13 +18,16 @@ namespace UserViewRazorPages.Pages.Bodt
         IUserRepository userRepository = new UserRepository();
         [BindProperty]
         public User User { get; set; }
-        public IActionResult OnGet(int id)
+        [BindProperty]
+        public string selectedGender { get; set; }
+        public IActionResult OnGet()
         {
-            if (id == null)
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId == 0)
             {
                 return NotFound();
             }
-            User = userRepository.GetUser(id);
+            User = userRepository.GetUser(userId);
             if (User == null)
             {
                 return NotFound();
@@ -41,6 +45,7 @@ namespace UserViewRazorPages.Pages.Bodt
             }
             try
             {
+                User.Gender = (selectedGender == "Male") ? true : false;
                 userRepository.Update(User);
             }
             catch (DbUpdateConcurrencyException)
@@ -55,7 +60,7 @@ namespace UserViewRazorPages.Pages.Bodt
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Bodt/MainPage");
         }
 
         private bool UserExists(int id)
