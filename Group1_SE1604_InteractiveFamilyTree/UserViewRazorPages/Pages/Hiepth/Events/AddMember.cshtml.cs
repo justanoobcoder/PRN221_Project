@@ -71,7 +71,7 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
             }
             List<int> userIds = AddedUsers.Select(x => x.UserId).ToList();
             eventRepository.AddUsersToEvent(int.Parse(eventId), userIds);
-            return RedirectToPage("ListAll");
+            return RedirectToPage("MyFamilyEvents");
         }
     }
 }

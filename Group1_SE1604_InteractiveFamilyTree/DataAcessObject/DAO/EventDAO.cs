@@ -106,6 +106,7 @@ namespace DataAccesObject.DAO
             {
                 List<Event> events = context.UserJoins
                     .Include(e => e.Event)
+                    .Include(e => e.Event.Creator)
                     .Where(e => e.UserId == userId)
                     .Select(e => e.Event).ToList();
                 return events;

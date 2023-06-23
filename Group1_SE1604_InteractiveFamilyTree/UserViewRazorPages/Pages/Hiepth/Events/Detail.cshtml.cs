@@ -1,4 +1,5 @@
 using BussinessObject.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Hiepth;
@@ -17,9 +18,14 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
         public Event Event { get; set; }
         public bool CanJoin { get; set; } = false;
 
-        public void OnGet(int id)
+        public IActionResult OnGet(int id)
         {
-            UserJoin uj = eventRepository.GetUserJoinByUserIdAndEventId(1, id);
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return NotFound();
+            }
+            UserJoin uj = eventRepository.GetUserJoinByUserIdAndEventId(userId.Value, id);
             if (uj == null)
             {
                 CanJoin = true;
@@ -36,11 +42,17 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
                 UserJoin userJoin = eventRepository.GetUserJoinByUserIdAndEventId(u.UserId, id);
                 UserStatus.Add(userJoin.Status);
             }
+            return Page();
         }
 
         public IActionResult OnPostRequestToJoin(string eventId)
         {
-            eventRepository.RequestToJoinEvent(1, int.Parse(eventId));
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return NotFound();
+            }
+            eventRepository.RequestToJoinEvent(userId.Value, int.Parse(eventId));
             return RedirectToPage("Detail", new { id = int.Parse(eventId) });
         }
     }

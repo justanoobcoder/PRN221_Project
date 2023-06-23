@@ -1,4 +1,5 @@
 using BussinessObject.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Hiepth;
@@ -14,10 +15,16 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public List<Event> Events { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            int familyId = (int)userRepository.GetById(1).FamilyId;
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return NotFound();
+            }
+            int familyId = (int)userRepository.GetById(userId.Value).FamilyId;
             Events = eventRepository.GetByFamilyId(familyId);
+            return Page();
         }
     }
 }
