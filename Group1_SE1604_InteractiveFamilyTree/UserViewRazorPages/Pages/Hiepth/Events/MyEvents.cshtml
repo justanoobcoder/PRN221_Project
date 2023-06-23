@@ -3,9 +3,17 @@
 @using DataAcessObject.Common
 @{
     ViewData["Title"] = "My Events";
+    Layout = "_UserLayout";
 }
 
-<h1>All events</h1>
+<div>
+    <a class="btn btn-primary" href="Create">Create event</a>
+</div>
+<div>
+    <a class="btn btn-primary" href="MyFamilyEvents">See family events</a>
+</div>
+
+<h1>My Events</h1>
 
 <table class="table table-hover">
     <thead>

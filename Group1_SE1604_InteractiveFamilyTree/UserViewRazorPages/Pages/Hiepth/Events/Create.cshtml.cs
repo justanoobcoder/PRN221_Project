@@ -1,5 +1,6 @@
 using BussinessObject.Models;
 using DataAcessObject.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Hiepth;
@@ -20,7 +21,12 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public IActionResult OnPost()
         {
-            Event.CreatorId = 1;
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return NotFound();
+            }
+            Event.CreatorId = userId.Value;
             Event.Status = EventStatus.Waiting.ToString();
 
             int newEventId = eventRepository.Save(Event);

@@ -1,5 +1,6 @@
 using BussinessObject.Models;
 using DataAcessObject.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Hiepth;
@@ -17,10 +18,15 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public IActionResult OnGet()
         {
-            Events = eventRepository.GetByUserId(1);
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return NotFound();
+            }
+            Events = eventRepository.GetByUserId(userId.Value);
             foreach (var e in Events)
             {
-                UserJoin userJoin = eventRepository.GetUserJoinByUserIdAndEventId(1, e.EventId);
+                UserJoin userJoin = eventRepository.GetUserJoinByUserIdAndEventId(userId.Value, e.EventId);
                 UserStatus.Add(userJoin.Status);
             }
             return Page();
@@ -28,7 +34,12 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public IActionResult OnPostAcceptEvent(string eventId)
         {
-            UserJoin userJoin = eventRepository.GetUserJoinByUserIdAndEventId(1, int.Parse(eventId));
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return NotFound();
+            }
+            UserJoin userJoin = eventRepository.GetUserJoinByUserIdAndEventId(userId.Value, int.Parse(eventId));
             userJoin.Status = UserEventStatus.Accepted.ToString();
             eventRepository.UpdateUserJoin(userJoin);
             return RedirectToPage("MyEvents");
@@ -36,7 +47,12 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public IActionResult OnPostDenyEvent(string eventId)
         {
-            UserJoin userJoin = eventRepository.GetUserJoinByUserIdAndEventId(1, int.Parse(eventId));
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return NotFound();
+            }
+            UserJoin userJoin = eventRepository.GetUserJoinByUserIdAndEventId(userId.Value, int.Parse(eventId));
             userJoin.Status = UserEventStatus.Denied.ToString();
             eventRepository.UpdateUserJoin(userJoin);
             return RedirectToPage("MyEvents");
