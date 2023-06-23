@@ -7,9 +7,10 @@
     ViewData["Title"] = "User Tree";
     Layout = "_UserLayout";
 }
-
-<h1>User Tree</h1>
 <link rel="stylesheet" href="/css/MainPage.css" />
+<h1>User Tree</h1>
+
+<a asp-page="/Bodt/ChooseRelation" asp-route-id=1 class="styled-button">Add</a>
 @if (TempData["notification"] != null)
 {
     <div class="alert alert-info">@TempData["notification"]</div>
@@ -49,8 +50,7 @@ else
         var content = new System.Text.StringBuilder();
         foreach (var child in children)
         {
- 
-            content.AppendLine("<li><br />");
+            content.AppendLine("<li><br/>");
             content.AppendLine($"<a class=\"boxed-link\">{child.Name}</a>");
             content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={child.UserId}'>Detail</a>");
             
@@ -58,17 +58,15 @@ else
             if(child.PartnerId != 0){
                 for (int i=0;i< Model.Users.Count;i++){
                     if (child.PartnerId == Model.Users[i].UserId){
-
                         content.AppendLine($"- <a class=\"boxed-link\">{Model.Users[i].Name}</a>");
                         content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={child.PartnerId}'>Detail</a>");
-
                         break;
                     }
                 }
                 
             }
             //check if user has any children, if yes, continue render
-            if (child.Children != null && child.Children.Count > 0)
+            if (child.Children != null)
             {
                 content.AppendLine("<ul>");
                 content.AppendLine(RenderChildren(child.Children).ToString());
@@ -77,7 +75,8 @@ else
             content.AppendLine("</li>");
         }
         return new HtmlString(content.ToString());
-    }
+        }
+
 
 }
-<a asp-page="/Bodt/ChooseRelation" asp-route-id=1>Add</a>
+

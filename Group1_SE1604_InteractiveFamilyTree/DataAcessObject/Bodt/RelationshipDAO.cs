@@ -12,23 +12,6 @@ namespace DataAcessObject.Bodt
 {
     public class RelationshipDAO
     {
-        private static RelationshipDAO instance = null;
-        private static object instanceLook = new object();
-
-        public static RelationshipDAO Instance
-        {
-            get
-            {
-                lock (instanceLook)
-                {
-                    if (instance == null)
-                    {
-                        instance = new RelationshipDAO();
-                    }
-                    return instance;
-                }
-            }
-        }
         FamilyTreeContext context = new FamilyTreeContext();
         public List<int> GetRelationship(int userId,int relationshipId)
         {
@@ -59,7 +42,7 @@ namespace DataAcessObject.Bodt
                 var query = from user in context.Users
                             join rel in context.Relationships on user.UserId equals rel.UserId2 into userRel
                             from ur in userRel.DefaultIfEmpty()
-                            where user.FamilyId == 1 && ur == null
+                            where user.FamilyId == familyId && ur == null
                             select user.UserId;
                 mainUser = query.FirstOrDefault();
             }
@@ -145,20 +128,22 @@ namespace DataAcessObject.Bodt
         }
         public void Delete(int userId)
         {
+            var _context = new FamilyTreeContext();
             try
-            {           
-                    Relationship relationshipToRemove = context.Relationships
-                        .FirstOrDefault(od => od.UserId2 == userId);
-                        context.Relationships.Remove(relationshipToRemove);
-                     List<UserJoin> UserJoinToRemove = context.UserJoins
-                        .Where(od => od.UserId == userId)
-                        .ToList();
-                    foreach (UserJoin userJoinToRemove in UserJoinToRemove)
-                    {
-                        context.UserJoins.Remove(userJoinToRemove);
-                    }
-                context.Users.Remove(UserDAO.Instance.GetUser(userId));
-                    context.SaveChanges();
+            {
+                Relationship relationshipToRemove = _context.Relationships
+                    .FirstOrDefault(od => od.UserId2 == userId);
+                _context.Relationships.Remove(relationshipToRemove);
+                List<UserJoin> UserJoinToRemove = _context.UserJoins
+                    .Where(od => od.UserId == userId)
+                    .ToList();
+                if (UserJoinToRemove.Count > 0)
+                foreach(var userJoin in UserJoinToRemove){
+                        _context.UserJoins.Remove(userJoin);
+                }
+                UserDAO userDAO = new UserDAO();
+                _context.Users.Remove(userDAO.GetUser(userId));
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {

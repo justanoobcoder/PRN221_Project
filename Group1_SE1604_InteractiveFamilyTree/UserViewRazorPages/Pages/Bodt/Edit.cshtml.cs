@@ -10,12 +10,14 @@ using BussinessObject.Models;
 using Repositories.Bodt.Imple;
 using Repositories.Bodt;
 using Microsoft.AspNetCore.Http;
+using RazorPage.ViewModels;
 
 namespace UserViewRazorPages.Pages.Bodt
 {
     public class EditModel : PageModel
     {
         IUserRepository userRepository = new UserRepository();
+        public string PasswordConfirm { get; set; }
         [BindProperty]
         public User User { get; set; }
         [BindProperty]
@@ -39,28 +41,20 @@ namespace UserViewRazorPages.Pages.Bodt
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-            try
+            String confirmPassword = Request.Form["ConfirmPassword"];
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId != 0 && confirmPassword.Equals(User.Password))
             {
                 User.Gender = (selectedGender == "Male") ? true : false;
+                ModelState.AddModelError(string.Empty, "Success!");
                 userRepository.Update(User);
+                return Page();
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!UserExists(User.UserId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError(string.Empty, "Wrong inpur, or password and password confirm do not match.");
+                return Page();
             }
-
-            return RedirectToPage("/Bodt/MainPage");
         }
 
         private bool UserExists(int id)

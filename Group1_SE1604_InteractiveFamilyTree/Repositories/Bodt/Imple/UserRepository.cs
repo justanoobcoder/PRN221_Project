@@ -11,50 +11,51 @@ namespace Repositories.Bodt
 {
     public class UserRepository : IUserRepository
     {
-        public void AddUser(User user) => UserDAO.Instance.AddUser(user);
+        UserDAO userDAO= new UserDAO();
+        public void AddUser(User user) => userDAO.AddUser(user);
 
-        public void DeleteUser(int userId) => UserDAO.Instance.Delete(userId);
+        public void DeleteUser(int userId) => userDAO.Delete(userId);
 
 
         public User GetUser(int userId)
         {
-            return UserDAO.Instance.GetUser(userId);
+            return userDAO.GetUser(userId);
         }
 
         public User GetUserByEmail(string email)
         {
-            return UserDAO.Instance.GetUserByEmail(email);
+            return userDAO.GetUserByEmail(email);
         }
 
         public List<User> GetUserList()
         {
-            return UserDAO.Instance.GetUserList();
+            return userDAO.GetUserList();
         }
         public List<User> GetUserListByFamilyId(int familyId)
         {
-            return UserDAO.Instance.GetUserListByFamilyId(familyId);
+            return userDAO.GetUserListByFamilyId(familyId);
         }
 
         public User Login(string email, string password)
         {
-            return UserDAO.Instance.Login(email, password);
+            return userDAO.Login(email, password);
         }
 
-        public void Update(User user) => UserDAO.Instance.Update(user);
+        public void Update(User user) => userDAO.Update(user);
 
         public List<User> searchUser(string search)
         {
-            return UserDAO.Instance.searchUser(search);
+            return userDAO.searchUser(search);
         }
         public int familyCount(int familyId)
         {
-            return UserDAO.Instance.familyCount(familyId);  
+            return userDAO.familyCount(familyId);  
         }
         public List<User> getMarriedUser(int FamilyId)
-        { return UserDAO.Instance.getMarriedUser(FamilyId); }
+        { return userDAO.getMarriedUser(FamilyId); }
         public List<User> getUnavailable(int FamilyId)
         {
-            return UserDAO.Instance.getUnavailable(FamilyId);
+            return userDAO.getUnavailable(FamilyId);
         }
     }
 }

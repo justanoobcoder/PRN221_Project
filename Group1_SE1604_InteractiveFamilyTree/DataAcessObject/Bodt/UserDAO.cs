@@ -9,23 +9,6 @@ namespace DataAcessObject.Bodt
 {
     public class UserDAO
     {
-        private static UserDAO instance = null;
-        private static object instanceLook = new object();
-
-        public static UserDAO Instance
-        {
-            get
-            {
-                lock (instanceLook)
-                {
-                    if (instance == null)
-                    {
-                        instance = new UserDAO();
-                    }
-                    return instance;
-                }
-            }
-        }
         FamilyTreeContext context = new FamilyTreeContext();
         public List<User> GetUserList()
         {

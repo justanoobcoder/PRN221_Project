@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Repositories.Dangptm;
+using Repositories.Bodt;
+using Repositories.Bodt.Imple;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +29,7 @@ namespace UserViewRazorPages
             services.AddRazorPages();
             services.AddSession();
             services.AddScoped<IFamilyRepository, FamilyRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<Repositories.Dangptm.IUserRepository, Repositories.Dangptm.UserRepository>();
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
                 options.Conventions.AddPageRoute("/Dangptm/Login", "");

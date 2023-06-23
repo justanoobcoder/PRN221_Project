@@ -28,7 +28,7 @@ namespace UserViewRazorPages.Pages.Bodt
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
             User loginUser = userRepository.GetUser(userId);
             MainUser = relationshipRepository.GetMainUser(loginUser.FamilyId.GetValueOrDefault());
-            Users = userRepository.GetUserListByFamilyId(loginUser.FamilyId.GetValueOrDefault());
+            Users = userRepository.GetUserListByFamilyId(loginUser.FamilyId.GetValueOrDefault()).ToList();
             foreach (User user in Users)
             {
                 user.PartnerId = relationshipRepository.getPartner(user.UserId);

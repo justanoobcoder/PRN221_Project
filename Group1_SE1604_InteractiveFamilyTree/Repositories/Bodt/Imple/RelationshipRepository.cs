@@ -11,37 +11,38 @@ namespace Repositories.Bodt.Imple
 {
     public class RelationshipRepository : IRelationshipRepository
     {
+        RelationshipDAO relationshipDAO= new RelationshipDAO();
         public List<int> GetRelationship(int userId, int relationshipId)
         {
-            return RelationshipDAO.Instance.GetRelationship(userId, relationshipId);
+            return relationshipDAO.GetRelationship(userId, relationshipId);
         }
 
         public int GetMainUser(int familyId)
         {
-            return RelationshipDAO.Instance.GetMainUser(familyId);
+            return relationshipDAO.GetMainUser(familyId);
         }
         public int getPartner(int userId)
         {
-            return RelationshipDAO.Instance.getPartner(userId);
+            return relationshipDAO.getPartner(userId);
         }
-        public void AddRelationship(Relationship relationship) => RelationshipDAO.Instance.AddRelationship(relationship);
+        public void AddRelationship(Relationship relationship) => relationshipDAO.AddRelationship(relationship);
         public int GetNextRelationshipId()
         {
-            return RelationshipDAO.Instance.GetNextRelationshipId();
+            return relationshipDAO.GetNextRelationshipId();
         }
         public List<int> CheckRelatedUser(int userId)
         {
-            return RelationshipDAO.Instance.CheckRelatedUser(userId);
+            return relationshipDAO.CheckRelatedUser(userId);
         }
         public Relationship GetRelationship(int relationshipId)
         {
-            return RelationshipDAO.Instance.GetRelationship(relationshipId);
+            return relationshipDAO.GetRelationship(relationshipId);
         }
-        public void Delete(int userId) => RelationshipDAO.Instance.Delete(userId);
+        public void Delete(int userId) => relationshipDAO.Delete(userId);
 
         public bool CheckBelongUser(int userId)
         {
-            return RelationshipDAO.Instance.CheckBelongUser(userId);
+            return relationshipDAO.CheckBelongUser(userId);
         }
         }
 }

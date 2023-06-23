@@ -15,6 +15,9 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="User.UserId" />
+            <input type="hidden" asp-for="User.FamilyId" />
+            <input type="hidden" asp-for="User.Status" />
+            <input type="hidden" asp-for="User.Code" />
             <div class="form-group">
                 <label asp-for="User.Name" class="control-label"></label>
                 <input asp-for="User.Name" class="form-control" />
@@ -24,12 +27,17 @@
                 <label asp-for="User.Email" class="control-label"></label>
                 <input asp-for="User.Email" class="form-control" />
                 <span asp-validation-for="User.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            </div>            <div class="form-group">
                 <label asp-for="User.Password" class="control-label"></label>
-                <input asp-for="User.Password" class="form-control" />
+                <input type="password" asp-for="User.Password" class="form-control" required />
                 <span asp-validation-for="User.Password" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label for="ConfirmPassword" class="control-label">Confirm Password</label>
+                <input type="password" type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" required />
+                <span asp-validation-for="User.Password" class="text-danger"></span>
+            </div>
+    
             <div class="form-group">
                 <label asp-for="User.Gender" class="control-label">Gender</label><br />
                 <label for="option1">Male</label>
@@ -47,16 +55,6 @@
                 <label asp-for="User.Birthday" class="control-label"></label>
                 <input asp-for="User.Birthday" class="form-control" />
                 <span asp-validation-for="User.Birthday" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.Code" class="control-label"></label>
-                <input asp-for="User.Code" class="form-control" />
-                <span asp-validation-for="User.Code" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.Status" class="control-label"></label>
-                <input asp-for="User.Status" class="form-control" />
-                <span asp-validation-for="User.Status" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
