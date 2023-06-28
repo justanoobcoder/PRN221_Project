@@ -9,23 +9,6 @@ namespace DataAcessObject.Bodt
 {
     public class UserDAO
     {
-        private static UserDAO instance = null;
-        private static object instanceLook = new object();
-
-        public static UserDAO Instance
-        {
-            get
-            {
-                lock (instanceLook)
-                {
-                    if (instance == null)
-                    {
-                        instance = new UserDAO();
-                    }
-                    return instance;
-                }
-            }
-        }
         FamilyTreeContext context = new FamilyTreeContext();
         public List<User> GetUserList()
         {
@@ -275,6 +258,22 @@ namespace DataAcessObject.Bodt
                 throw new Exception(ex.Message);
             }
             return List;
+        }
+        public Boolean CheckUserCodeIsValid(String code)
+        {
+            Boolean check;
+            try
+            {
+                User user = context.Users.FirstOrDefault(od => od.Code.Equals(code));
+                if (user != null)
+                    check = false;
+                else check = true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return check;
         }
     }
     

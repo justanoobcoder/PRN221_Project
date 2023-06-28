@@ -21,7 +21,6 @@ namespace UserViewRazorPages.Pages.Dangptm
 
         [BindProperty]
         public string selectedOption { get; set; } = default!;
-
         public IActionResult OnGet()
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
@@ -38,9 +37,9 @@ namespace UserViewRazorPages.Pages.Dangptm
             try
             {
                 User.Gender = (selectedOption == "Male") ? true : false;
+                User.Status = "Using";
                 _userRepository.Update(User);
-                ViewData["notification"] = "Successfully!!";
-                return Page();
+                return Redirect("/Bodt/MainPage");
             }
             catch (Exception ex)
             {

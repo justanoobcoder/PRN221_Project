@@ -9,14 +9,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting.Internal;
 
 namespace UserViewRazorPages
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _environment;
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            _environment = environment;
         }
 
         public IConfiguration Configuration { get; }
@@ -26,8 +29,8 @@ namespace UserViewRazorPages
         {
             services.AddRazorPages();
             services.AddSession();
-            services.AddScoped<IFamilyRepository, FamilyRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IFamilyRepository, Repositories.Dangptm.FamilyRepository>();
+            services.AddScoped<Repositories.Dangptm.IUserRepository, Repositories.Dangptm.UserRepository>();
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
                 options.Conventions.AddPageRoute("/Dangptm/Login", "");
@@ -35,6 +38,7 @@ namespace UserViewRazorPages
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+            services.AddSingleton<IWebHostEnvironment>(_environment);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

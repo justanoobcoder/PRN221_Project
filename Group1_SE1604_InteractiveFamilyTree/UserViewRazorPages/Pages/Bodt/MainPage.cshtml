@@ -4,12 +4,12 @@
 @model UserViewRazorPages.Pages.Bodt.IndexModel
 
 @{
-    ViewData["Title"] = "User Tree";
+    ViewData["Title"] = "Family Tree";
     Layout = "_UserLayout";
 }
-
-<h1>User Tree</h1>
 <link rel="stylesheet" href="/css/MainPage.css" />
+<h1>User Tree</h1>
+<a asp-page="/Bodt/ChooseRelation" asp-route-id=1 class="styled-button">Add</a>
 @if (TempData["notification"] != null)
 {
     <div class="alert alert-info">@TempData["notification"]</div>
@@ -20,13 +20,9 @@
         @foreach (var user in Model.Users)
         {
             @if (Model.Users.IndexOf(user) == @Model.MainUser){
-                <a class="boxed-link">@user.Name</a>
-                <a asp-page="/Bodt/Details" asp-route-id="@user.UserId">Detail</a>
-                @if (@Model.partnerOfMain != null)
-                {
-                    <a class="boxed-link"> - @Model.partnerOfMain.Name</a>
-                    <a asp-page="/Bodt/Details" asp-route-id="@Model.partnerOfMain.UserId">Detail</a>
-                }
+                @RenderMain(user)
+                @RenderPartner(user)
+                ;
             <br />
                 @if (user.Children == null || user.Children.Count ==0)
                     continue;
@@ -49,26 +45,14 @@ else
         var content = new System.Text.StringBuilder();
         foreach (var child in children)
         {
- 
-            content.AppendLine("<li><br />");
-            content.AppendLine($"<a class=\"boxed-link\">{child.Name}</a>");
+            content.AppendLine("<li style = 'margin-left: 50px;'><br/>");
+            content.AppendLine($"<a class=\"boxed-link\"><img src=\"/{child.ImageUrl}\" alt=\"{child.Name}\" style=\"width: 120px; height: 150px; border: 1px solid black;\"/><br/>{child.Name}</a>");
             content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={child.UserId}'>Detail</a>");
-            
+
             // check for id of husband/wife
-            if(child.PartnerId != 0){
-                for (int i=0;i< Model.Users.Count;i++){
-                    if (child.PartnerId == Model.Users[i].UserId){
-
-                        content.AppendLine($"- <a class=\"boxed-link\">{Model.Users[i].Name}</a>");
-                        content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={child.PartnerId}'>Detail</a>");
-
-                        break;
-                    }
-                }
-                
-            }
+            content.AppendLine(RenderPartner(child).ToString());
             //check if user has any children, if yes, continue render
-            if (child.Children != null && child.Children.Count > 0)
+            if (child.Children != null)
             {
                 content.AppendLine("<ul>");
                 content.AppendLine(RenderChildren(child.Children).ToString());
@@ -79,5 +63,33 @@ else
         return new HtmlString(content.ToString());
     }
 
+
+    public IHtmlContent RenderPartner(User user){
+        var content = new System.Text.StringBuilder();
+        if(user.PartnerId >0){
+            for (int i = 0; i < Model.Users.Count; i++)
+            {
+                if (user.PartnerId == Model.Users[i].UserId)
+                {
+                    content.AppendLine($"<a class=\"boxed-link\"><img src=\"/{Model.Users[i].ImageUrl}\" alt=\"{Model.Users[i].Name}\" style=\"width: 120px; height: 150px; border: 1px solid black;\"/><br/>{Model.Users[i].Name}</a>");
+                    content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={user.PartnerId}'>Detail</a>");
+                    break;
+                }
+            }
+        }
+        return new HtmlString(content.ToString());
+    }
+
+    public IHtmlContent RenderMain(User user)
+    {
+        var content = new System.Text.StringBuilder();
+        if (user != null)
+        {
+            content.AppendLine($"<a class=\"boxed-link\"><img src=\"/{user.ImageUrl}\" alt=\"{user.Name}\" style=\"width: 120px; height: 150px; border: 1px solid black;\"/><br/>{user.Name}</a>");
+            content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={user.UserId}'>Detail</a>");
+
+        }
+        return new HtmlString(content.ToString());
+    }
 }
-<a asp-page="/Bodt/ChooseRelation" asp-route-id=1>Add</a>
+

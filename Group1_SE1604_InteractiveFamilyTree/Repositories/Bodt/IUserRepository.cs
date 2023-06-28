@@ -29,5 +29,6 @@ namespace Repositories.Bodt.Imple
         public int familyCount(int familyId);
         public List<User> getMarriedUser(int FamilyId);
         public List<User> getUnavailable(int FamilyId);
+        public Boolean CheckUserCodeIsValid(String code);
     }
 }

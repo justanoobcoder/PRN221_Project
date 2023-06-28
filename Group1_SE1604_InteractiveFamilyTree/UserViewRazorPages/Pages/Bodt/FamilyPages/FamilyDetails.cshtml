@@ -1,0 +1,33 @@
+﻿@page
+@model UserViewRazorPages.Pages.Bodt.FamilyPages.FamilyDetailsModel
+@{
+    ViewData["Title"] = "Family Details";
+    Layout = "_UserLayout";
+}
+<div>
+    <h4>Family</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Family.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Family.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Family.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Family.Address)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Family.Information)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Family.Information)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="/Bodt/FamilyPages/EditFamilyProfile" asp-route-id="@Model.Family.FamilyId">Edit</a>
+</div>
