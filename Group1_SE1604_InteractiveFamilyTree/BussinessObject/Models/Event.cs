@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,6 +11,7 @@ namespace BussinessObject.Models
     {
         public Event()
         {
+            EventReports = new HashSet<EventReport>();
             UserJoins = new HashSet<UserJoin>();
         }
 
@@ -24,8 +26,9 @@ namespace BussinessObject.Models
         [Required(ErrorMessage = "Information is required")]
         public string Information { get; set; }
         public string Status { get; set; }
-
+        public string Location { get; set; }
         public virtual User Creator { get; set; }
+        public virtual ICollection<EventReport> EventReports { get; set; }
         public virtual ICollection<UserJoin> UserJoins { get; set; }
     }
 }

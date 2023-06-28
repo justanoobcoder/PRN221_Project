@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,6 +11,8 @@ namespace BussinessObject.Models
     {
         public User()
         {
+            AccountReports = new HashSet<AccountReport>();
+            EventReports = new HashSet<EventReport>();
             Events = new HashSet<Event>();
             RelationshipUserId1Navigations = new HashSet<Relationship>();
             RelationshipUserId2Navigations = new HashSet<Relationship>();
@@ -26,8 +29,11 @@ namespace BussinessObject.Models
         public int? FamilyId { get; set; }
         public string Code { get; set; }
         public string Status { get; set; }
+        public string Img { get; set; }
 
         public virtual Family Family { get; set; }
+        public virtual ICollection<AccountReport> AccountReports { get; set; }
+        public virtual ICollection<EventReport> EventReports { get; set; }
         public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<Relationship> RelationshipUserId1Navigations { get; set; }
         public virtual ICollection<Relationship> RelationshipUserId2Navigations { get; set; }

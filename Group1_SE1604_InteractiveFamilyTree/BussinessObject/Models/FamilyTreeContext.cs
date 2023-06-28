@@ -26,6 +26,7 @@ namespace BussinessObject.Models
         public virtual DbSet<Family> Families { get; set; }
         public virtual DbSet<Relationship> Relationships { get; set; }
         public virtual DbSet<RelationshipDetail> RelationshipDetails { get; set; }
+        public virtual DbSet<Status> Statuses { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserJoin> UserJoins { get; set; }
 
@@ -55,7 +56,22 @@ namespace BussinessObject.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.DateReported).HasColumnType("date");
+
+                entity.Property(e => e.Reason).HasMaxLength(200);
+
                 entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.Reporter)
+                    .WithMany(p => p.AccountReports)
+                    .HasForeignKey(d => d.ReporterId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AccountReport_User");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.AccountReports)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_AccountReport_Status");
             });
 
             modelBuilder.Entity<Admin>(entity =>
@@ -100,11 +116,18 @@ namespace BussinessObject.Models
 
                 entity.Property(e => e.Information).HasMaxLength(500);
 
+                entity.Property(e => e.Location).HasMaxLength(500);
+
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Status)
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Creator)
+                    .WithMany(p => p.Events)
+                    .HasForeignKey(d => d.CreatorId)
+                    .HasConstraintName("FK_Event_User");
             });
 
             modelBuilder.Entity<EventReport>(entity =>
@@ -113,7 +136,27 @@ namespace BussinessObject.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.DateReported).HasColumnType("date");
+
                 entity.Property(e => e.EventId).HasColumnName("EventID");
+
+                entity.Property(e => e.Reason).HasMaxLength(200);
+
+                entity.HasOne(d => d.Event)
+                    .WithMany(p => p.EventReports)
+                    .HasForeignKey(d => d.EventId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EventReport_Event1");
+
+                entity.HasOne(d => d.Reporter)
+                    .WithMany(p => p.EventReports)
+                    .HasForeignKey(d => d.ReporterId)
+                    .HasConstraintName("FK_EventReport_User");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.EventReports)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_EventReport_Status");
             });
 
             modelBuilder.Entity<Family>(entity =>
@@ -180,6 +223,15 @@ namespace BussinessObject.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Status>(entity =>
+            {
+                entity.ToTable("Status");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("User");
@@ -198,6 +250,10 @@ namespace BussinessObject.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.FamilyId).HasColumnName("FamilyID");
+
+                entity.Property(e => e.Img)
+                    .HasMaxLength(50)
+                    .HasColumnName("img");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -223,7 +279,7 @@ namespace BussinessObject.Models
             modelBuilder.Entity<UserJoin>(entity =>
             {
                 entity.HasKey(e => new { e.EventId, e.UserId })
-                    .HasName("PK__UserJoin__A83C44BA78B7B8E8");
+                    .HasName("PK__UserJoin__A83C44BA8A45C5EC");
 
                 entity.ToTable("UserJoin");
 
