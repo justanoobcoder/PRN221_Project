@@ -57,5 +57,9 @@ namespace Repositories.Bodt
         {
             return userDAO.getUnavailable(FamilyId);
         }
+        public Boolean CheckUserCodeIsValid(String code)
+        {
+            return userDAO.CheckUserCodeIsValid(code);
+        }
     }
 }

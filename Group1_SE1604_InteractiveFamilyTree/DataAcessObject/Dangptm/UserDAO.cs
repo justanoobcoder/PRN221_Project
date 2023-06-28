@@ -158,7 +158,7 @@ namespace DataAccesObject.Dangptm
             try
             {
                 User u = GetUser(user.UserId);
-                if (u != null)
+                if (u != null && GetUserByEmail(user.Email)== null)
                 {
                     context.Entry(u).State = EntityState.Detached;
                     context.Users.Update(user);
@@ -166,7 +166,7 @@ namespace DataAccesObject.Dangptm
                 }
                 else
                 {
-                    throw new Exception("User does not exist!!");
+                    throw new Exception("Email has been used!");
                 }
             }
             catch (Exception ex)

@@ -19,6 +19,8 @@ namespace UserViewRazorPages.Pages.Bodt
         public IActionResult OnGet(int id)
         {
             User = userRepository.GetUser(id);
+            if (User.ImageUrl == null)
+                User.ImageUrl = "images/User.jpg";
             return Page();
         }
     }

@@ -197,6 +197,10 @@ namespace BussinessObject.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ImageUrl)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.FamilyId).HasColumnName("FamilyID");
 
                 entity.Property(e => e.Name)

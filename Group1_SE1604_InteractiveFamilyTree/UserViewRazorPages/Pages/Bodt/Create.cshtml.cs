@@ -9,16 +9,25 @@ using BussinessObject.Models;
 using Repositories.Bodt.Imple;
 using Repositories.Bodt;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace UserViewRazorPages.Pages.Bodt
 {
     public class CreateModel : PageModel
     {
+        private readonly IWebHostEnvironment _environment;
+        public CreateModel(IWebHostEnvironment environment)
+        {
+            _environment = environment;
+        }
         IRelationshipRepository relationshipRepository = new RelationshipRepository();
         IUserRepository userRepository = new UserRepository();
         [BindProperty]
         public int SelectedUserId { get; set; }
         public List<User> users { get; set; }
+        [BindProperty]
+        public IFormFile ImageFile { get; set; }
         [BindProperty]
         public User User { get; set; }
         [BindProperty]
@@ -57,8 +66,13 @@ namespace UserViewRazorPages.Pages.Bodt
 
         public IActionResult OnPost()
         {
-            User.FamilyId = 1;
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            User loginUser = userRepository.GetUser(userId);
+            User.FamilyId = loginUser.FamilyId;
             User.Gender = (selectedGender == "Male") ? true : false;
+            UploadImage(ImageFile);
+            RandomCodeGenerator randomCodeGenerator = new RandomCodeGenerator();
+            User.Code = randomCodeGenerator.GenerateRandomCode();
             userRepository.AddUser(User);
             Relationship relationship = new Relationship();
             relationship.RelationshipId = relationshipRepository.GetNextRelationshipId();
@@ -76,6 +90,49 @@ namespace UserViewRazorPages.Pages.Bodt
             }
 
             return RedirectToPage("/Bodt/MainPage");
+        }
+        private async Task<string> UploadImage(IFormFile ImageFile)
+        {
+            if (ImageFile != null && ImageFile.Length > 0)
+            {
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
+                string directoryPath = Path.Combine(_environment.WebRootPath, "images");
+                string imagePath = Path.Combine(directoryPath, fileName);
+
+                // Create the directory if it doesn't exist
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await ImageFile.CopyToAsync(stream);
+                }
+
+                User.ImageUrl = "images/" + fileName;
+                return User.ImageUrl;
+            }
+
+            return null;
+        }
+        private class RandomCodeGenerator
+        {
+            IUserRepository _userRepository = new UserRepository();
+            private static Random random = new Random();
+            private const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            public string GenerateRandomCode()
+            {
+                string code = new string(Enumerable.Repeat(chars, 10)
+                    .Select(s => s[random.Next(s.Length)])
+                    .ToArray());
+                if (!_userRepository.CheckUserCodeIsValid(code)) 
+                { 
+                return GenerateRandomCode();
+                }
+                return code;
+            }
         }
     }
 }

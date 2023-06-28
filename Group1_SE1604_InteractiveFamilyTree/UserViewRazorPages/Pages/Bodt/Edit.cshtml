@@ -12,12 +12,17 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="User.UserId" />
             <input type="hidden" asp-for="User.FamilyId" />
             <input type="hidden" asp-for="User.Status" />
             <input type="hidden" asp-for="User.Code" />
+            <input type="hidden" asp-for="@Model.image" />
+            <img src="/@Model.User.ImageUrl" alt="User Image" style="width:200px; height:250px">
+                <div>
+                    <input type="file" name="imageFile" accept="image/*" />
+                </div>
             <div class="form-group">
                 <label asp-for="User.Name" class="control-label"></label>
                 <input asp-for="User.Name" class="form-control" />

@@ -11,6 +11,7 @@ using Repositories.Bodt;
 using RazorPage.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System.Data;
+using System.IO;
 
 namespace UserViewRazorPages.Pages.Bodt
 {
@@ -28,17 +29,25 @@ namespace UserViewRazorPages.Pages.Bodt
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
             User loginUser = userRepository.GetUser(userId);
             MainUser = relationshipRepository.GetMainUser(loginUser.FamilyId.GetValueOrDefault());
-            Users = userRepository.GetUserListByFamilyId(loginUser.FamilyId.GetValueOrDefault()).ToList();
+            Users = userRepository.GetUserListByFamilyId(loginUser.FamilyId.GetValueOrDefault());
+            string imagePath;
+            byte[] imageData;
+            string base64Image;
+            string dataUri;
             foreach (User user in Users)
             {
                 user.PartnerId = relationshipRepository.getPartner(user.UserId);
+                if (user.ImageUrl == null)
+                    user.ImageUrl = "images/User.jpg";
+                //show image
+                
                 List<int> relationship = relationshipRepository.GetRelationship(user.UserId, 1);
-                if (relationship == null || relationship.Count == 0)
-                    continue;
                 if (user.UserId == MainUser)
                 {
                     MainUser = Users.IndexOf(user);
                 }
+                if (relationship == null || relationship.Count == 0)
+                    continue;   
                 List<User> users = new List<User>();
                 for (int i = 0; i < relationship.Count; i++)
                 {
@@ -50,6 +59,7 @@ namespace UserViewRazorPages.Pages.Bodt
             {
                 partnerOfMain = userRepository.GetUser(Users[MainUser].PartnerId);
             }
+            else partnerOfMain = null;
             return Page();
         }
     }

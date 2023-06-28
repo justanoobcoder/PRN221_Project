@@ -11,17 +11,30 @@ using Repositories.Bodt.Imple;
 using Repositories.Bodt;
 using Microsoft.AspNetCore.Http;
 using RazorPage.ViewModels;
+using Microsoft.Extensions.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace UserViewRazorPages.Pages.Bodt
 {
     public class EditModel : PageModel
     {
+        private readonly IWebHostEnvironment _environment;
+        public EditModel(IWebHostEnvironment environment)
+        {
+            _environment = environment;
+        }
+
         IUserRepository userRepository = new UserRepository();
         public string PasswordConfirm { get; set; }
+        [BindProperty]
+        public IFormFile ImageFile { get; set; }
         [BindProperty]
         public User User { get; set; }
         [BindProperty]
         public string selectedGender { get; set; }
+        [BindProperty]
+        public string image { get; set; }
         public IActionResult OnGet()
         {
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
@@ -34,6 +47,7 @@ namespace UserViewRazorPages.Pages.Bodt
             {
                 return NotFound();
             }
+            image = User.ImageUrl;
             return Page();
         }
 
@@ -43,8 +57,10 @@ namespace UserViewRazorPages.Pages.Bodt
         {
             String confirmPassword = Request.Form["ConfirmPassword"];
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            
             if (userId != 0 && confirmPassword.Equals(User.Password))
             {
+                UploadImage(ImageFile);
                 User.Gender = (selectedGender == "Male") ? true : false;
                 ModelState.AddModelError(string.Empty, "Success!");
                 userRepository.Update(User);
@@ -64,6 +80,32 @@ namespace UserViewRazorPages.Pages.Bodt
                 return true;
             return false;
 
+        }
+        private async Task<string> UploadImage(IFormFile ImageFile)
+        {
+            if (ImageFile != null && ImageFile.Length > 0)
+            {
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
+                string directoryPath = Path.Combine(_environment.WebRootPath, "images");
+                string imagePath = Path.Combine(directoryPath, fileName);
+
+                // Create the directory if it doesn't exist
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await ImageFile.CopyToAsync(stream);
+                }
+
+                User.ImageUrl = "images/" + fileName;
+                return User.ImageUrl;
+            }
+            else User.ImageUrl = image;
+
+            return null;
         }
     }
 }

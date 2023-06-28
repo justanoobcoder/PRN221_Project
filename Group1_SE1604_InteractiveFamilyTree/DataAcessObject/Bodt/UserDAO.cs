@@ -259,6 +259,22 @@ namespace DataAcessObject.Bodt
             }
             return List;
         }
+        public Boolean CheckUserCodeIsValid(String code)
+        {
+            Boolean check;
+            try
+            {
+                User user = context.Users.FirstOrDefault(od => od.Code.Equals(code));
+                if (user != null)
+                    check = false;
+                else check = true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return check;
+        }
     }
     
 }

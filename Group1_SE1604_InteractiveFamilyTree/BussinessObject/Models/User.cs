@@ -26,6 +26,7 @@ namespace BussinessObject.Models
         public int? FamilyId { get; set; }
         public string Code { get; set; }
         public string Status { get; set; }
+        public string ImageUrl { get; set; }
 
         public virtual Family Family { get; set; }
         public virtual ICollection<Event> Events { get; set; }
