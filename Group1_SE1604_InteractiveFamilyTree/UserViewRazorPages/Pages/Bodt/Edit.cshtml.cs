@@ -47,7 +47,7 @@ namespace UserViewRazorPages.Pages.Bodt
             {
                 return NotFound();
             }
-            image = User.ImageUrl;
+            image = User.Img;
             return Page();
         }
 
@@ -100,10 +100,10 @@ namespace UserViewRazorPages.Pages.Bodt
                     await ImageFile.CopyToAsync(stream);
                 }
 
-                User.ImageUrl = "images/" + fileName;
-                return User.ImageUrl;
+                User.Img = "images/" + fileName;
+                return User.Img;
             }
-            else User.ImageUrl = image;
+            else User.Img = image;
 
             return null;
         }

@@ -67,8 +67,8 @@ namespace UserViewRazorPages.Pages.Bodt
                     await ImageFile.CopyToAsync(stream);
                 }
 
-                User.ImageUrl = "images/" + fileName;
-                return User.ImageUrl;
+                User.Img = "images/" + fileName;
+                return User.Img;
             }
 
             return null;

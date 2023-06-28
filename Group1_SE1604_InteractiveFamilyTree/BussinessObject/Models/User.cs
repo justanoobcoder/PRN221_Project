@@ -29,11 +29,7 @@ namespace BussinessObject.Models
         public int? FamilyId { get; set; }
         public string Code { get; set; }
         public string Status { get; set; }
-<<<<<<< HEAD
         public string Img { get; set; }
-=======
-        public string ImageUrl { get; set; }
->>>>>>> dothanhbo
 
         public virtual Family Family { get; set; }
         public virtual ICollection<AccountReport> AccountReports { get; set; }

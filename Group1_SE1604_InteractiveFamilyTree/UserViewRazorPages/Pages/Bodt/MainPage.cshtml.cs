@@ -37,8 +37,8 @@ namespace UserViewRazorPages.Pages.Bodt
             foreach (User user in Users)
             {
                 user.PartnerId = relationshipRepository.getPartner(user.UserId);
-                if (user.ImageUrl == null)
-                    user.ImageUrl = "images/User.jpg";
+                if (user.Img == null)
+                    user.Img = "images/User.jpg";
                 //show image
                 
                 List<int> relationship = relationshipRepository.GetRelationship(user.UserId, 1);

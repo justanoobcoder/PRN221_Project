@@ -46,7 +46,7 @@ else
         foreach (var child in children)
         {
             content.AppendLine("<li style = 'margin-left: 50px;'><br/>");
-            content.AppendLine($"<a class=\"boxed-link\"><img src=\"/{child.ImageUrl}\" alt=\"{child.Name}\" style=\"width: 120px; height: 150px; border: 1px solid black;\"/><br/>{child.Name}</a>");
+            content.AppendLine($"<a class=\"boxed-link\"><img src=\"/{child.Img}\" alt=\"{child.Name}\" style=\"width: 120px; height: 150px; border: 1px solid black;\"/><br/>{child.Name}</a>");
             content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={child.UserId}'>Detail</a>");
 
             // check for id of husband/wife
@@ -71,7 +71,7 @@ else
             {
                 if (user.PartnerId == Model.Users[i].UserId)
                 {
-                    content.AppendLine($"<a class=\"boxed-link\"><img src=\"/{Model.Users[i].ImageUrl}\" alt=\"{Model.Users[i].Name}\" style=\"width: 120px; height: 150px; border: 1px solid black;\"/><br/>{Model.Users[i].Name}</a>");
+                    content.AppendLine($"<a class=\"boxed-link\"><img src=\"/{Model.Users[i].Img}\" alt=\"{Model.Users[i].Name}\" style=\"width: 120px; height: 150px; border: 1px solid black;\"/><br/>{Model.Users[i].Name}</a>");
                     content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={user.PartnerId}'>Detail</a>");
                     break;
                 }
@@ -85,7 +85,7 @@ else
         var content = new System.Text.StringBuilder();
         if (user != null)
         {
-            content.AppendLine($"<a class=\"boxed-link\"><img src=\"/{user.ImageUrl}\" alt=\"{user.Name}\" style=\"width: 120px; height: 150px; border: 1px solid black;\"/><br/>{user.Name}</a>");
+            content.AppendLine($"<a class=\"boxed-link\"><img src=\"/{user.Img}\" alt=\"{user.Name}\" style=\"width: 120px; height: 150px; border: 1px solid black;\"/><br/>{user.Name}</a>");
             content.AppendLine($" <a href='{Url.Page("/Bodt/Details")}?id={user.UserId}'>Detail</a>");
 
         }

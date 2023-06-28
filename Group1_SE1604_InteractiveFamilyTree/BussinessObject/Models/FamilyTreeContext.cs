@@ -249,7 +249,7 @@ namespace BussinessObject.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ImageUrl)
+                entity.Property(e => e.Img)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
