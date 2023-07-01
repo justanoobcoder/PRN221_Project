@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BussinessObject.Models;
 using Repositories.Bodt.Imple;
 using Repositories.Bodt;
+using Microsoft.AspNetCore.Http;
 
 namespace UserViewRazorPages.Pages.Bodt
 {
@@ -15,9 +16,11 @@ namespace UserViewRazorPages.Pages.Bodt
     {
         IUserRepository userRepository = new UserRepository();
         public User User { get; set; }
-
+        [BindProperty]
+        public int UserId { get; set; }
         public IActionResult OnGet(int id)
         {
+            UserId = HttpContext.Session.GetInt32("UserId") ?? 0;
             User = userRepository.GetUser(id);
             if (User.Img == null)
                 User.Img = "images/User.jpg";

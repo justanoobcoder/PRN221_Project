@@ -94,5 +94,19 @@ namespace DataAcessObject.Bodt
                 throw new Exception(ex.Message);
             }
         }
+        public List<Family> GetAllFamilies()
+        {
+            List<Family> families = new List<Family>(); 
+            try
+            {
+                families = context.Families.ToList();
+                    context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return families;
         }
+    }
     }

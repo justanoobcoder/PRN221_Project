@@ -24,5 +24,9 @@ namespace Repositories.Bodt.Imple
             return familyDAO.GetFamily(familyId);
         }
         public void EditFamilyDetail(Family family) => familyDAO.EditFamilyDetail(family);
+        public List<Family> GetAllFamilies()
+        {
+            return familyDAO.GetAllFamilies();
+        }
     }
 }

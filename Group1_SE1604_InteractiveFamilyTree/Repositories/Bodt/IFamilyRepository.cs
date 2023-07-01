@@ -13,5 +13,6 @@ namespace Repositories.Bodt
         public int CreateNewFamily(Family family);
         public Family GetFamily(int familyId);
         public void EditFamilyDetail(Family family);
+        public List<Family> GetAllFamilies();
     }
 }
