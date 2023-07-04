@@ -17,5 +17,14 @@ namespace Repositories.Bodt.Imple
         {
             return accountReportDAO.showAccountReport(userId);
         }
+        public List<AccountReport> GetAccountReports()
+        {
+            return accountReportDAO.GetAccountReports();
+        }
+        public AccountReport GetAccountReport(int accountReportId)
+        {
+            return accountReportDAO.GetAccountReport(accountReportId);
+        }
+        public void Update(AccountReport accountReport) => accountReportDAO.Update(accountReport);
     }
 }

@@ -10,10 +10,6 @@
 <link rel="stylesheet" href="/css/MainPage.css" />
 <h1>User Tree</h1>
 <a asp-page="/Bodt/ChooseRelation" asp-route-id=1 class="styled-button">Add</a>
-@if (TempData["notification"] != null)
-{
-    <div class="alert alert-info">@TempData["notification"]</div>
-}
 @if (Model.Users != null && Model.Users.Count > 0)
 {
     <div>

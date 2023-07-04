@@ -6,30 +6,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Models;
+using Repositories.Bodt.Imple;
+using Repositories.Bodt;
 
 namespace UserViewRazorPages.Pages.AdminPages.UserManagement
 {
     public class DeleteModel : PageModel
     {
-        private readonly BussinessObject.Models.FamilyTreeContext _context;
-
-        public DeleteModel(BussinessObject.Models.FamilyTreeContext context)
-        {
-            _context = context;
-        }
+        IUserRepository userRepository = new UserRepository();
+        IRelationshipRepository relationshipRepository = new RelationshipRepository();
 
         [BindProperty]
         public User User { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public IActionResult OnGet(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            User = await _context.Users
-                .Include(u => u.Family).FirstOrDefaultAsync(m => m.UserId == id);
+            User = userRepository.GetUser(id.GetValueOrDefault());
 
             if (User == null)
             {
@@ -38,22 +35,31 @@ namespace UserViewRazorPages.Pages.AdminPages.UserManagement
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public IActionResult OnPost(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            User = await _context.Users.FindAsync(id);
+            User = userRepository.GetUser(id.GetValueOrDefault());
+
 
             if (User != null)
             {
-                _context.Users.Remove(User);
-                await _context.SaveChangesAsync();
+                bool userCheck = relationshipRepository.CheckBelongUser(id.GetValueOrDefault());
+                if (!userCheck)
+                {
+                    relationshipRepository.Delete(id.GetValueOrDefault());
+                    TempData["notification"] = "Success!!!";
+                }
+                else
+                {
+                    TempData["notification"] = "Can not delete bacause there are users belong to this user!!!";
+                }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./UserReportManagement");
         }
     }
 }

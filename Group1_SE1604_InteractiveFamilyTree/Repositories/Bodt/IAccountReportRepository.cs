@@ -11,5 +11,8 @@ namespace Repositories.Bodt
     {
         public void CreateNewReport(AccountReport accountReport);
         public List<AccountReport> showAccountReport(int userId);
+        public List<AccountReport> GetAccountReports();
+        public AccountReport GetAccountReport(int accountReportId);
+        public void Update(AccountReport accountReport);
     }
 }
