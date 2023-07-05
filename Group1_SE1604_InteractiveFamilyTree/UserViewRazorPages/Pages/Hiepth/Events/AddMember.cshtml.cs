@@ -1,5 +1,6 @@
 using BussinessObject.Models;
 using DataAcessObject.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorPage.ViewModels;
@@ -23,6 +24,11 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public IActionResult OnGet(int eventId)
         {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return RedirectToPage("/Dangptm/Login");
+            }
             AddedUsers = SessionHelper.GetObjectFromJson<List<User>>(HttpContext.Session, AddedUsersSession);
             if (AddedUsers is null)
             {
@@ -37,6 +43,11 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public IActionResult OnPostAddMember(string eventId, string userId)
         {
+            int? loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId is null)
+            {
+                return RedirectToPage("/Dangptm/Login");
+            }
             AddedUsers = SessionHelper.GetObjectFromJson<List<User>>(HttpContext.Session, AddedUsersSession);
             if (AddedUsers is null)
             {
@@ -50,6 +61,11 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public IActionResult OnPostDeleteMember(string eventId, string index)
         {
+            int? loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId is null)
+            {
+                return RedirectToPage("/Dangptm/Login");
+            }
             AddedUsers = SessionHelper.GetObjectFromJson<List<User>>(HttpContext.Session, AddedUsersSession);
             if (AddedUsers is null || AddedUsers.Count == 0)
             {
@@ -63,6 +79,11 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public IActionResult OnPost(string eventId)
         {
+            int? loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId is null)
+            {
+                return RedirectToPage("/Dangptm/Login");
+            }
             AddedUsers = SessionHelper.GetObjectFromJson<List<User>>(HttpContext.Session, AddedUsersSession);
 
             if (AddedUsers is null || AddedUsers.Count == 0)

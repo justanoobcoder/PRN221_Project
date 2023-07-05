@@ -24,7 +24,7 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
             int? userId = HttpContext.Session.GetInt32("UserId");
             if (userId is null)
             {
-                return NotFound();
+                return RedirectToPage("/Dangptm/Login");
             }
             Event.CreatorId = userId.Value;
             Event.Status = EventStatus.Waiting.ToString();

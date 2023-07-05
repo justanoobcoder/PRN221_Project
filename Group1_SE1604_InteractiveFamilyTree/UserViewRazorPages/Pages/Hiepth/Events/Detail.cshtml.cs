@@ -23,7 +23,7 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
             int? userId = HttpContext.Session.GetInt32("UserId");
             if (userId is null)
             {
-                return NotFound();
+                return RedirectToPage("/Dangptm/Login");
             }
             UserJoin uj = eventRepository.GetUserJoinByUserIdAndEventId(userId.Value, id);
             if (uj == null)
@@ -50,7 +50,7 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
             int? userId = HttpContext.Session.GetInt32("UserId");
             if (userId is null)
             {
-                return NotFound();
+                return RedirectToPage("/Dangptm/Login");
             }
             eventRepository.RequestToJoinEvent(userId.Value, int.Parse(eventId));
             return RedirectToPage("Detail", new { id = int.Parse(eventId) });

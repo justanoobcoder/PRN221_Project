@@ -1,4 +1,5 @@
 using BussinessObject.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Hiepth;
@@ -16,6 +17,11 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public IActionResult OnGet()
         {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return RedirectToPage("/Dangptm/Login");
+            }
             UnseenEventCount = eventRepository.GetUnseenEventCountByUserId(1);
             Events = eventRepository.GetAll();
             return Page();
