@@ -21,9 +21,33 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
             int? userId = HttpContext.Session.GetInt32("UserId");
             if (userId is null)
             {
-                return NotFound();
+                return RedirectToPage("/Dangptm/Login");
             }
-            Events = eventRepository.GetByUserId(userId.Value);
+            Events = eventRepository.GetByUserId(userId.Value).OrderByDescending(e => e.StartDate).ToList();
+            foreach (var e in Events)
+            {
+                UserJoin userJoin = eventRepository.GetUserJoinByUserIdAndEventId(userId.Value, e.EventId);
+                UserStatus.Add(userJoin.Status);
+            }
+            return Page();
+        }
+
+        public IActionResult OnPostSearch(string value)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return RedirectToPage("/Dangptm/Login");
+            }
+            Events = eventRepository.GetByUserId(userId.Value)
+                .OrderByDescending(e => e.StartDate)
+                .ToList();
+            if (value is not null)
+            {
+                Events = Events
+                    .Where(e => e.EventName.ToLower().Contains(value.ToLower().Trim()))
+                    .ToList();
+            }
             foreach (var e in Events)
             {
                 UserJoin userJoin = eventRepository.GetUserJoinByUserIdAndEventId(userId.Value, e.EventId);

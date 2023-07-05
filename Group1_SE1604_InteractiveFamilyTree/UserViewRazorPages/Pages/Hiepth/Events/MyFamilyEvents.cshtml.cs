@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Hiepth;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace UserViewRazorPages.Pages.Hiepth.Events
 {
@@ -20,10 +21,30 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
             int? userId = HttpContext.Session.GetInt32("UserId");
             if (userId is null)
             {
-                return NotFound();
+                return RedirectToPage("/Dangptm/Login");
             }
             int familyId = (int)userRepository.GetById(userId.Value).FamilyId;
-            Events = eventRepository.GetByFamilyId(familyId);
+            Events = eventRepository.GetByFamilyId(familyId).OrderByDescending(e => e.StartDate).ToList();
+            return Page();
+        }
+
+        public IActionResult OnPostSearch(string value)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return RedirectToPage("/Dangptm/Login");
+            }
+            int familyId = (int)userRepository.GetById(userId.Value).FamilyId;
+            Events = eventRepository.GetByFamilyId(familyId)
+                .OrderByDescending(e => e.StartDate)
+                .ToList();
+            if (value is not null)
+            {
+                Events = Events
+                    .Where(e => e.EventName.ToLower().Contains(value.ToLower().Trim()))
+                    .ToList();
+            }
             return Page();
         }
     }
