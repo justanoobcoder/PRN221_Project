@@ -29,7 +29,7 @@ namespace UserViewRazorPages.Pages.Dangptm
             {
                 int AdminId = loginAdmin.AdminId;
                 HttpContext.Session.SetInt32("AdminId", AdminId);
-                return Page();
+                return RedirectToPage("/AdminPages/FamilyManagement/FamilyManagement");
             }
 
         }

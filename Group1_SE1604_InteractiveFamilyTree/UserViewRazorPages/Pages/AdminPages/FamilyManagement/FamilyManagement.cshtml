@@ -1,0 +1,43 @@
+﻿@page
+@model UserViewRazorPages.Pages.AdminPages.FamilyManagement.FamilyManagementModel
+@{
+    ViewData["Title"] = "Family Management";
+    Layout = "_AdminLayout";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Family[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Family[0].Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Family[0].Information)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Family) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Information)
+            </td>
+            <td>
+                    <form method="post" asp-page-handler="OnPost" asp-page="/AdminPages/UserManagement/Index">
+                        <input type="hidden" name="family" value="@item.FamilyId" />
+                        <button type="submit">Family members</button>
+                    </form>
+        </tr>
+}
+    </tbody>
+</table>

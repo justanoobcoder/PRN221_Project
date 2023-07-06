@@ -2,29 +2,31 @@
 @model UserViewRazorPages.Pages.Bodt.AddFirstUserModel
 @{
 }
+
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-9">
         <form method="post" enctype="multipart/form-data">
-            <<input asp-for="@Model.FamilyId" type="hidden" />
+            <input asp-for="@Model.FamilyId" type="hidden" />
+            <p>You are the first one in the family tree;</P>    
+            <p>everyone else is dependent on you.</p>
             <div class="form-group">
                 <label asp-for="User.Name" class="control-label"></label>
-                <input asp-for="User.Name" class="form-control" />
+                <input asp-for="User.Name" class="form-control" required/>
                 <span asp-validation-for="User.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="User.Email" class="control-label"></label>
-                <input asp-for="User.Email" class="form-control" />
+                <input asp-for="User.Email" class="form-control" required/>
                 <span asp-validation-for="User.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="User.Password" class="control-label"></label>
-                <input asp-for="User.Password" class="form-control" />
+                <input asp-for="User.Password" class="form-control" required/>
                 <span asp-validation-for="User.Password" class="text-danger"></span>
             </div>
             <div>
                 <input type="file" name="imageFile" accept="image/*" /></br>
-                <a style="color:red">If this user do not use the app, you can not change the image latter!</a>
             </div>
             <div class="form-group">
                 <label asp-for="User.Gender" class="control-label">Gender</label><br />

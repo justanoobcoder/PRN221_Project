@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Assignment002</title>
+    <title>@ViewData["Title"] - Family Tree Project</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Assignment002.styles.css" asp-append-version="true" />
@@ -31,7 +31,16 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Bodt/FamilyPages/FamilyDetails">My Family</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" id="logoutButton" href="#">Logout</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Bodt/AccountReportList">My Account Report</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item" ml-auto">
+                            <form method="post" asp-area="" asp-page="/Dangptm/Login" asp-page-handler="deletesession">
+                                <button type="submit" class="nav-link text-dark" style="background: none; border: none; padding: 0;">
+                                    Logout
+                                </button>
+                            </form>
                         </li>
                     </ul>
                 </div>
@@ -46,7 +55,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            Author: Do Thanh Bo
+            Authors: Group 1
         </div>
     </footer>
 

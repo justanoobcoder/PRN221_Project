@@ -37,18 +37,20 @@ namespace UserViewRazorPages.Pages.Bodt
         public IActionResult OnGet(string option)
         {
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId == 0)
+                return NotFound();
             User loginUser = userRepository.GetUser(userId);
             SelectedOption = option;
             users = userRepository.GetUserListByFamilyId(loginUser.FamilyId.GetValueOrDefault());
             List<User> doNotIncludedUsers;
             if (SelectedOption.Equals("Option1"))
             {
-                doNotIncludedUsers = userRepository.getMarriedUser(1);
+                doNotIncludedUsers = userRepository.getMarriedUser(loginUser.FamilyId.GetValueOrDefault());
                 
             }
             else
             {
-                doNotIncludedUsers = userRepository.getUnavailable(1);
+                doNotIncludedUsers = userRepository.getUnavailable(loginUser.FamilyId.GetValueOrDefault());
             }
             foreach (var user in users.ToList())
             {
@@ -73,6 +75,7 @@ namespace UserViewRazorPages.Pages.Bodt
             UploadImage(ImageFile);
             RandomCodeGenerator randomCodeGenerator = new RandomCodeGenerator();
             User.Code = randomCodeGenerator.GenerateRandomCode();
+            User.Status = "Not used";
             userRepository.AddUser(User);
             Relationship relationship = new Relationship();
             relationship.RelationshipId = relationshipRepository.GetNextRelationshipId();

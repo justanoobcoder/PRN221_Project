@@ -22,6 +22,8 @@ namespace UserViewRazorPages.Pages.Bodt.FamilyPages
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId == 0)
+                return NotFound();
             User user = userRepository.GetUser(userId);
 
             Family = familyRepository.GetFamily(user.FamilyId.GetValueOrDefault());

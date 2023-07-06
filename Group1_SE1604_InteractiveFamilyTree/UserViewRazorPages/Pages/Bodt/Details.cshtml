@@ -61,8 +61,12 @@
             @Html.DisplayFor(model => model.User.Status)
         </dd>
     </dl>
-</div>
-<a asp-page="/Bodt/Delete" asp-route-id="@Model.User.UserId">Delete</a>
-<div>
+    @if (Model.User.UserId != Model.UserId)
+    {
+        <div>
+            <a asp-page="/Bodt/Delete" asp-route-id="@Model.User.UserId">Request for delete</a>
+        </div>
+    }
+
     <a asp-page="/Bodt/MainPage">Back to List</a>
 </div>

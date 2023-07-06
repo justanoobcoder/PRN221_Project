@@ -1,0 +1,43 @@
+﻿@page
+@model UserViewRazorPages.Pages.AdminPages.AdminManagement.ChangeInformationModel
+@{
+    ViewData["Title"] = "My Information";
+    Layout = "_AdminLayout";
+}
+<h4>Admin</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Admin.AdminId" />
+            <div class="form-group">
+                <label asp-for="Admin.Name" class="control-label"></label>
+                <input asp-for="Admin.Name" class="form-control" />
+                <span asp-validation-for="Admin.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admin.PhoneNumber" class="control-label"></label>
+                <input asp-for="Admin.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Admin.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admin.Email" class="control-label"></label>
+                <input asp-for="Admin.Email" class="form-control" />
+                <span asp-validation-for="Admin.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admin.Password" class="control-label"></label>
+                <input asp-for="Admin.Password" class="form-control" type="password" required/>
+                <span asp-validation-for="Admin.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -27,6 +27,8 @@ namespace UserViewRazorPages.Pages.Bodt
         public IActionResult OnGet()
         {
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId == 0)
+                return NotFound();
             User loginUser = userRepository.GetUser(userId);
             MainUser = relationshipRepository.GetMainUser(loginUser.FamilyId.GetValueOrDefault());
             Users = userRepository.GetUserListByFamilyId(loginUser.FamilyId.GetValueOrDefault());

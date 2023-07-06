@@ -68,6 +68,7 @@ namespace UserViewRazorPages.Pages.Bodt
             }
             else
             {
+                User.Img = image;
                 ModelState.AddModelError(string.Empty, "Wrong inpur, or password and password confirm do not match.");
                 return Page();
             }
