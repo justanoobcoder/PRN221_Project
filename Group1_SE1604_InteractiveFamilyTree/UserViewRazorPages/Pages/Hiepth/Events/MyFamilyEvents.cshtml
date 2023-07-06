@@ -5,7 +5,14 @@
     Layout = "_UserLayout";
 }
 
-<h1>My family events</h1>
+<h2>My family events</h2>
+
+<div class="d-flex col-4">
+    <form class="input-group w-auto" method="post" asp-page-handler="search">
+        <input type="text" class="form-control" name="value" placeholder="Event name"/>
+        <button class="btn btn-primary">Search</button>
+    </form>
+</div>
 
 <table class="table table-hover">
     <thead>
@@ -14,6 +21,7 @@
             <th scope="col">Name</th>
             <th scope="col">Creator</th>
             <th scope="col">Information</th>
+            <th scope="col">Location</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
             <th scope="col">Status</th>
@@ -27,6 +35,7 @@
                 <td>@item.EventName</td>
                 <td>@item.Creator.Name</td>
                 <td>@item.Information</td>
+                <td>@item.Location</td>
                 <td>@item.StartDate</td>
                 <td>@item.EndDate</td>
                 <td>@item.Status</td>

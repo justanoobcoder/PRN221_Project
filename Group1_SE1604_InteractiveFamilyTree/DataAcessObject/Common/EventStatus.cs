@@ -8,6 +8,6 @@ namespace DataAcessObject.Common
 {
     public enum EventStatus
     {
-        Waiting, Suppended, Ended, Deleted
+        Waiting, Suppended, OnGoing, Ended, Deleted
     }
 }
