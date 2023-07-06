@@ -266,7 +266,7 @@ namespace DataAccesObject.DAO
             }
             try
             {
-                Event e = GetEvent(ev.EventId);
+                Event e = GetByEventId(ev.EventId);
                 if (e != null)
                 {
                     context.Entry(e).State = EntityState.Detached;

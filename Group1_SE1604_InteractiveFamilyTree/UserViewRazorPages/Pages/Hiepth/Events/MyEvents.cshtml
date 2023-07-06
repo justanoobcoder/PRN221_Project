@@ -57,7 +57,7 @@
                             </form>
                             <form method="post" asp-page-handler="DenyEvent">
                                 <input type="hidden" name="eventId" value="@item.Item1.EventId" />
-                                <button class="btn btn-danger">Deny</button>
+                                <button class="btn btn-danger" onclick="return confirm('Are you sure you want to deny this?')">Deny</button>
                             </form>
                         }
                     }

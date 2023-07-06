@@ -72,6 +72,9 @@
             }
             else if (Model.Event.Status.Equals(EventStatus.Waiting.ToString()))
             {
+                <div>
+                    <a class="btn btn-primary" href="Update?eventId=@Model.Event.EventId">Update</a>
+                </div>
                 @if (Model.Event.StartDate <= DateTime.Now)
                 {
                     <form method="post" asp-page-handler="ChangeEventStatus">
@@ -90,7 +93,7 @@
                     <form method="post" asp-page-handler="ChangeEventStatus">
                         <input type="hidden" name="eventId" value="@Model.Event.EventId"/>
                         <input type="hidden" name="action" value="delete"/>
-                        <button class="btn btn-danger">Delete</button>
+                        <button class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this?')">Delete</button>
                     </form>
                 }
             }
@@ -152,12 +155,12 @@
                                         @if (item.Item2.Equals(UserEventStatus.Pending.ToString()))
                                         {
                                             <input type="hidden" name="action" value="delete" />
-                                            <button class="btn btn-danger">Delete</button>
+                                            <button class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this?')">Delete</button>
                                         }
                                         @if (item.Item2.Equals(UserEventStatus.Accepted.ToString()))
                                         {
                                             <input type="hidden" name="action" value="deny" />
-                                            <button class="btn btn-danger">Deny</button>
+                                            <button class="btn btn-danger" onclick="return confirm('Are you sure you want to deny this?')">Deny</button>
                                         }
                                         @if (item.Item2.Equals(UserEventStatus.Requested.ToString()))
                                         {

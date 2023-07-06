@@ -7,24 +7,25 @@ using Repositories.Hiepth;
 
 namespace UserViewRazorPages.Pages.Hiepth.Events
 {
-    public class CreateModel : PageModel
+    public class UpdateModel : PageModel
     {
         private readonly IEventRepository eventRepository = new EventRepository();
 
         [BindProperty]
         public Event Event { get; set; }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(int eventId)
         {
             int? userId = HttpContext.Session.GetInt32("UserId");
             if (userId is null)
             {
                 return RedirectToPage("/Dangptm/Login");
             }
+            Event = eventRepository.GetByEventId(eventId);
             return Page();
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPost(string eventId)
         {
             int? userId = HttpContext.Session.GetInt32("UserId");
             if (userId is null)
@@ -36,12 +37,20 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
                 ModelState.AddModelError("Event.EndDate", "End Date must be after Start Date");
                 return Page();
             }
-            Event.CreatorId = userId.Value;
-            Event.Status = EventStatus.Waiting.ToString();
 
-            int newEventId = eventRepository.Save(Event);
+            if (!int.TryParse(eventId, out int eId))
+            {
+                return RedirectToPage("/Error");
+            }
+            var e = eventRepository.GetByEventId(eId);
+            e.EventName = Event.EventName;
+            e.Information = Event.Information;
+            e.StartDate = Event.StartDate;
+            e.EndDate = Event.EndDate;
+            e.Location = Event.Location;
+            eventRepository.Update(e);
 
-            return RedirectToPage("AddMember", new { eventId = newEventId });
+            return RedirectToPage("Detail", new { id = eventId });
         }
     }
 }
