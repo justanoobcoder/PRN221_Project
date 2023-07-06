@@ -82,11 +82,14 @@
                         }
                         <td>@item.PhoneNumber</td>
                         <td>
-                            <form method="post" asp-page-handler="DeleteMember">
-                                <input type="hidden" name="eventId" value="@Model.Event.EventId" />
-                                <input type="hidden" name="index" value="@index" />
-                                <button class="btn btn-danger">Delete</button>
-                            </form>
+                            @if (item.UserId != Model.LoginUserId)
+                            {
+                                <form method="post" asp-page-handler="DeleteMember">
+                                    <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                    <input type="hidden" name="index" value="@index" />
+                                    <button class="btn btn-danger">Delete</button>
+                                </form>
+                            }
                         </td>
                     </tr>
                 }

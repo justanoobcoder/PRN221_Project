@@ -56,7 +56,7 @@
     {
         <form method="post" asp-page-handler="RequestToJoin">
             <input type="hidden" name="eventId" value="@Model.Event.EventId"/>
-            <button class="btn btn-primary">Join</button>
+            <button class="btn btn-primary">Request to join</button>
         </form>
     }
     @if (Model.Event.CreatorId == Model.LoginUserId)

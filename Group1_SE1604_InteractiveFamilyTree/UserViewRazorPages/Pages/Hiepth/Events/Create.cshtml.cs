@@ -16,6 +16,11 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
 
         public IActionResult OnGet()
         {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId is null)
+            {
+                return RedirectToPage("/Dangptm/Login");
+            }
             return Page();
         }
 

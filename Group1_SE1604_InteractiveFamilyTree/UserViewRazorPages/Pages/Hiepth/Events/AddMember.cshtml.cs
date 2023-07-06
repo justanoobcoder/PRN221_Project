@@ -21,18 +21,24 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
         public Event Event { get; set; }
         public List<User> Users { get; set; }
         public List<User> AddedUsers { get; set; }
+        public int LoginUserId;
 
         public IActionResult OnGet(int eventId)
         {
-            int? userId = HttpContext.Session.GetInt32("UserId");
-            if (userId is null)
+            int? loginUserId = HttpContext.Session.GetInt32("UserId");
+            if (loginUserId is null)
             {
                 return RedirectToPage("/Dangptm/Login");
             }
+            LoginUserId = loginUserId.Value;
             AddedUsers = SessionHelper.GetObjectFromJson<List<User>>(HttpContext.Session, AddedUsersSession);
             if (AddedUsers is null)
             {
-                AddedUsers = new List<User>();
+                AddedUsers = new List<User>
+                {
+                    userRepository.GetById(loginUserId.Value)
+                };
+                SessionHelper.SetObjectAsJson(HttpContext.Session, AddedUsersSession, AddedUsers);
             }
             Event = eventRepository.GetByEventId(eventId);
             int familyId = (int)Event.Creator.FamilyId;
