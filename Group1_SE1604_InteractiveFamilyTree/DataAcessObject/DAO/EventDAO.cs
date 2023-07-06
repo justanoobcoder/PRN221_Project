@@ -102,19 +102,21 @@ namespace DataAccesObject.DAO
 
         public List<Event> GetByUserId(int userId)
         {
+            List<Event> events = new List<Event>();
             try
             {
-                List<Event> events = context.UserJoins
+                events = context.UserJoins
                     .Include(e => e.Event)
                     .Include(e => e.Event.Creator)
                     .Where(e => e.UserId == userId)
                     .Select(e => e.Event).ToList();
-                return events;
+
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
+            return events;
         }
 
         public UserJoin GetUserJoinByUserIdAndEventId(int userId, int eventId)
