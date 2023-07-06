@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,9 @@ namespace UserViewRazorPages.Pages.Bodt
 
         public IActionResult OnPost()
         {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId == 0)
+                return NotFound();
             return RedirectToPage("/Bodt/Create", new { option = SelectedOption });
         }
 

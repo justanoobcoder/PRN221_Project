@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BussinessObject.Models;
 using Repositories.Bodt;
 using Repositories.Bodt.Imple;
+using Microsoft.AspNetCore.Http;
 
 namespace UserViewRazorPages.Pages.AdminPages.FamilyManagement
 {
@@ -19,6 +20,12 @@ namespace UserViewRazorPages.Pages.AdminPages.FamilyManagement
 
         public IActionResult OnGet()
         {
+            int adminId = HttpContext.Session.GetInt32("AdminId") ?? 0;
+            if (adminId == 0)
+            {
+                return NotFound();
+            }
+
             Family = familyRepository.GetAllFamilies();
             return Page();
         }

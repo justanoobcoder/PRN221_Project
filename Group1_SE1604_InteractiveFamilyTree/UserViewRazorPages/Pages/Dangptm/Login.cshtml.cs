@@ -12,6 +12,12 @@ namespace UserViewRazorPages.Pages.Dangptm
 
         [BindProperty]
         public User User { get; set; } = default!;
+        public IActionResult OnPostDeleteSession()
+        {
+            HttpContext.Session.Remove("UserId");
+            HttpContext.Session.Remove("AdminId");
+            return Page();
+        }
 
         public IActionResult OnPost()
         {

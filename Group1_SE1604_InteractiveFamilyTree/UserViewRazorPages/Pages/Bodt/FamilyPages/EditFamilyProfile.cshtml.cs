@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BussinessObject.Models;
 using Repositories.Bodt.Imple;
 using Repositories.Bodt;
+using Microsoft.AspNetCore.Http;
 
 namespace UserViewRazorPages.Pages.Bodt.FamilyPages
 {
@@ -21,6 +22,9 @@ namespace UserViewRazorPages.Pages.Bodt.FamilyPages
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId == 0)
+                return NotFound();
             if (id == null)
             {
                 return NotFound();

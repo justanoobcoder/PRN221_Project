@@ -37,6 +37,8 @@ namespace UserViewRazorPages.Pages.Bodt
         public IActionResult OnGet(string option)
         {
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId == 0)
+                return NotFound();
             User loginUser = userRepository.GetUser(userId);
             SelectedOption = option;
             users = userRepository.GetUserListByFamilyId(loginUser.FamilyId.GetValueOrDefault());
@@ -73,6 +75,7 @@ namespace UserViewRazorPages.Pages.Bodt
             UploadImage(ImageFile);
             RandomCodeGenerator randomCodeGenerator = new RandomCodeGenerator();
             User.Code = randomCodeGenerator.GenerateRandomCode();
+            User.Status = "Not used";
             userRepository.AddUser(User);
             Relationship relationship = new Relationship();
             relationship.RelationshipId = relationshipRepository.GetNextRelationshipId();

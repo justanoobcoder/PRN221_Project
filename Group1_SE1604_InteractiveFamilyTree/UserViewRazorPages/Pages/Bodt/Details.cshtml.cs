@@ -21,6 +21,8 @@ namespace UserViewRazorPages.Pages.Bodt
         public IActionResult OnGet(int id)
         {
             UserId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (UserId == 0)
+                return NotFound();
             User = userRepository.GetUser(id);
             if (User.Img == null)
                 User.Img = "images/User.jpg";

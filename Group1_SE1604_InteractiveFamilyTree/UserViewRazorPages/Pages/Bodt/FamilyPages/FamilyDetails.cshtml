@@ -4,8 +4,55 @@
     ViewData["Title"] = "Family Details";
     Layout = "_UserLayout";
 }
-<div>
-    <h4>Family</h4>
+<style>
+    /* Style for the container div */
+    .family-details-container {
+        margin: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        background-color: #f5f5f5;
+    }
+
+        /* Style for the heading */
+        .family-details-container h4 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        /* Style for the horizontal rule */
+        .family-details-container hr {
+            border-color: #ccc;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Style for the definition list */
+        .family-details-container dl.row {
+            margin-bottom: 20px;
+        }
+
+        /* Style for the definition term */
+        .family-details-container dt.col-sm-2 {
+            font-weight: bold;
+        }
+
+        /* Style for the definition description */
+        .family-details-container dd.col-sm-10 {
+            margin-left: 0;
+        }
+
+        /* Style for the edit link */
+        .family-details-container a.edit-link {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+</style>
+<div class="family-details-container">
+    <h4>My Family</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -29,5 +76,5 @@
     </dl>
 </div>
 <div>
-    <a asp-page="/Bodt/FamilyPages/EditFamilyProfile" asp-route-id="@Model.Family.FamilyId">Edit</a>
+    <a class="edit-link" asp-page="/Bodt/FamilyPages/EditFamilyProfile" asp-route-id="@Model.Family.FamilyId">Edit</a>
 </div>

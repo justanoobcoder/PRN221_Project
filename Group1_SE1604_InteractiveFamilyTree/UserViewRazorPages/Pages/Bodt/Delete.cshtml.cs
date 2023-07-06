@@ -24,6 +24,9 @@ namespace UserViewRazorPages.Pages.Bodt
 
         public IActionResult OnGet(int id)
         {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId == 0)
+                return NotFound();
             if (id == null)
             {
                 return NotFound();

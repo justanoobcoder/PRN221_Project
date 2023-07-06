@@ -33,8 +33,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Bodt/AccountReportList">My Account Report</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" id="logoutButton" href="#">Logout</a>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item" ml-auto">
+                            <form method="post" asp-area="" asp-page="/Dangptm/Login" asp-page-handler="deletesession">
+                                <button type="submit" class="nav-link text-dark" style="background: none; border: none; padding: 0;">
+                                    Logout
+                                </button>
+                            </form>
                         </li>
                     </ul>
                 </div>
@@ -49,7 +55,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            Author: Do Thanh Bo
+            Authors: Group 1
         </div>
     </footer>
 

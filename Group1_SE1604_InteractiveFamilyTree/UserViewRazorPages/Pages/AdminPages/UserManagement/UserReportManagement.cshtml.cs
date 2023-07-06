@@ -9,6 +9,7 @@ using BussinessObject.Models;
 using Repositories.Bodt.Imple;
 using Repositories.Bodt;
 using System.Security.Cryptography.Xml;
+using Microsoft.AspNetCore.Http;
 
 namespace UserViewRazorPages.Pages.AdminPages.UserManagement
 {
@@ -22,6 +23,12 @@ namespace UserViewRazorPages.Pages.AdminPages.UserManagement
 
         public IActionResult OnGet()
         {
+            int adminId = HttpContext.Session.GetInt32("AdminId") ?? 0;
+            if (adminId == 0)
+            {
+                return NotFound();
+            }
+
             AccountReport = accountReportRepository.GetAccountReports();
             foreach(var report in AccountReport)
             {

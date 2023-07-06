@@ -21,6 +21,8 @@ namespace UserViewRazorPages.Pages.Bodt
         public IActionResult OnGet()
         {
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId == 0)
+                return NotFound();
             AccountReport = accountReportRepository.showAccountReport(userId);
             return Page();
         }

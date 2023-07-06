@@ -23,6 +23,10 @@ namespace UserViewRazorPages.Pages.AdminPages.AdminManagement
         public IActionResult OnGet()
         {
             int adminId = HttpContext.Session.GetInt32("AdminId") ?? 0;
+            if (adminId == 0)
+            {
+                return NotFound();
+            }
 
             Admin = adminRepository.GetAdmin(adminId);
 
