@@ -18,6 +18,7 @@ namespace Repositories.Hiepth
         void AddUsersToEvent(int eventId, List<int> userIds, int loggedInUserId);
         void RequestToJoinEvent(int userId, int eventId);
         void RemoveUserFromEvent(int eventId, int userId);
+        void Update(Event e);
         void UpdateUserJoin(UserJoin userJoin);
         List<User> GetUsersByEventId(int eventId);
         UserJoin GetUserJoinByUserIdAndEventId(int userId, int eventId);

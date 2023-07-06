@@ -60,7 +60,7 @@ namespace DataAccesObject.DAO
                     .Include(u => u.Events)
                     .Where(u => u.FamilyId == familyId && u.Password != null)
                     .ToList();
-                users.ForEach(u => events.AddRange(u.Events));
+                users.ForEach(u => events.AddRange(u.Events.Where(e => !e.Status.Equals(EventStatus.Deleted.ToString()))));
             }
             catch (Exception ex)
             {
@@ -108,7 +108,9 @@ namespace DataAccesObject.DAO
                     .Include(e => e.Event)
                     .Include(e => e.Event.Creator)
                     .Where(e => e.UserId == userId)
-                    .Select(e => e.Event).ToList();
+                    .Select(e => e.Event)
+                    .Where(ev => !ev.Status.Equals(EventStatus.Deleted.ToString()))
+                    .ToList();
                 return events;
             }
             catch (Exception ex)

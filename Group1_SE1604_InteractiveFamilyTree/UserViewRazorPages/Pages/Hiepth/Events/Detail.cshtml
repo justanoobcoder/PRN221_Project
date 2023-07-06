@@ -54,11 +54,55 @@
     </dl>
     @if (Model.CanJoin)
     {
-
         <form method="post" asp-page-handler="RequestToJoin">
             <input type="hidden" name="eventId" value="@Model.Event.EventId"/>
             <button class="btn btn-primary">Join</button>
         </form>
+    }
+    @if (Model.Event.CreatorId == Model.LoginUserId)
+    {
+        <div class="d-flex">
+            @if (Model.Event.Status.Equals(EventStatus.OnGoing.ToString()))
+            {
+                <form method="post" asp-page-handler="ChangeEventStatus">
+                    <input type="hidden" name="eventId" value="@Model.Event.EventId"/>
+                    <input type="hidden" name="action" value="ended"/>
+                    <button class="btn btn-danger">End Event</button>
+                </form>
+            }
+            else if (Model.Event.Status.Equals(EventStatus.Waiting.ToString()))
+            {
+                @if (Model.Event.StartDate <= DateTime.Now)
+                {
+                    <form method="post" asp-page-handler="ChangeEventStatus">
+                        <input type="hidden" name="eventId" value="@Model.Event.EventId"/>
+                        <input type="hidden" name="action" value="ongoing"/>
+                        <button class="btn btn-primary">On Going</button>
+                    </form>
+                }
+                else
+                {
+                    <form method="post" asp-page-handler="ChangeEventStatus">
+                        <input type="hidden" name="eventId" value="@Model.Event.EventId"/>
+                        <input type="hidden" name="action" value="suppend"/>
+                        <button class="btn btn-danger">Suppend</button>
+                    </form>
+                    <form method="post" asp-page-handler="ChangeEventStatus">
+                        <input type="hidden" name="eventId" value="@Model.Event.EventId"/>
+                        <input type="hidden" name="action" value="delete"/>
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                }
+            }
+            else if (Model.Event.Status.Equals(EventStatus.Suppended.ToString()))
+            {
+                <form method="post" asp-page-handler="ChangeEventStatus">
+                    <input type="hidden" name="eventId" value="@Model.Event.EventId"/>
+                    <input type="hidden" name="action" value="continue"/>
+                    <button class="btn btn-primary">Continue</button>
+                </form>
+            }
+        </div>
     }
     @if (Model.Users.Count > 0)
     {
@@ -115,7 +159,31 @@
                                             <input type="hidden" name="action" value="deny" />
                                             <button class="btn btn-danger">Deny</button>
                                         }
+                                        @if (item.Item2.Equals(UserEventStatus.Requested.ToString()))
+                                        {
+                                            <input type="hidden" name="action" value="accept" />
+                                            <button class="btn btn-primary">Accept</button>
+                                        }
                                         </form>
+                                    }
+                                    else if (Model.Event.Status.Equals(EventStatus.OnGoing.ToString()))
+                                    {
+
+                                        @if (item.Item2.Equals(UserEventStatus.Accepted.ToString()))
+                                        {
+                                            <form method="post" asp-page-handler="ModifyUserFromEvent">
+                                                <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                                <input type="hidden" name="userId" value="@item.Item1.UserId" />
+                                                <input type="hidden" name="action" value="present" />
+                                                <button class="btn btn-primary">Present</button>
+                                            </form>
+                                            <form method="post" asp-page-handler="ModifyUserFromEvent">
+                                                <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                                <input type="hidden" name="userId" value="@item.Item1.UserId" />
+                                                <input type="hidden" name="action" value="absent" />
+                                                <button class="btn btn-danger">Absent</button>
+                                            </form>
+                                        }
                                     }
                                 </td>
                             }

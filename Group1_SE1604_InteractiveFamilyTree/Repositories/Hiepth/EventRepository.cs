@@ -32,5 +32,7 @@ namespace Repositories.Hiepth
 
         public void UpdateUserJoin(UserJoin userJoin) => EventDAO.Instance.UpdateUserJoin(userJoin);
         public UserJoin GetUserJoinByUserIdAndEventId(int userId, int eventId) => EventDAO.Instance.GetUserJoinByUserIdAndEventId(userId, eventId);
+
+        public void Update(Event e) => EventDAO.Instance.Update(e);
     }
 }
