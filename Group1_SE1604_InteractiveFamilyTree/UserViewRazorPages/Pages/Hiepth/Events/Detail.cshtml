@@ -1,5 +1,6 @@
 ﻿@page
 @model UserViewRazorPages.Pages.Hiepth.Events.DetailModel
+@using DataAcessObject.Common
 @{
     ViewData["Title"] = "Event Detail";
     Layout = "_UserLayout";
@@ -71,6 +72,10 @@
                     <th scope="col">Gender</th>
                     <th scope="col">Phone Number</th>
                     <th scope="col">User Status</th>
+                    @if (Model.Event.CreatorId == Model.LoginUserId)
+                    {
+                        <th scope="col">Action</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -90,6 +95,31 @@
                         }
                         <td>@item.Item1.PhoneNumber</td>
                         <td>@item.Item2</td>
+                        @if (Model.Event.CreatorId == Model.LoginUserId)
+                        {
+                            @if (item.Item1.UserId != Model.LoginUserId)
+                            {
+                                <td style="display: flex;">
+                                    @if (Model.Event.Status.Equals(EventStatus.Waiting.ToString()))
+                                    {
+                                        <form method="post" asp-page-handler="ModifyUserFromEvent">
+                                            <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                            <input type="hidden" name="userId" value="@item.Item1.UserId" />
+                                        @if (item.Item2.Equals(UserEventStatus.Pending.ToString()))
+                                        {
+                                            <input type="hidden" name="action" value="delete" />
+                                            <button class="btn btn-danger">Delete</button>
+                                        }
+                                        @if (item.Item2.Equals(UserEventStatus.Accepted.ToString()))
+                                        {
+                                            <input type="hidden" name="action" value="deny" />
+                                            <button class="btn btn-danger">Deny</button>
+                                        }
+                                        </form>
+                                    }
+                                </td>
+                            }
+                        }
                     </tr>
                 }
             </tbody>

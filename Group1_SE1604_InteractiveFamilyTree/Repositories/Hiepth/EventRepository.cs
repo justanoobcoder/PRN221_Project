@@ -10,7 +10,7 @@ namespace Repositories.Hiepth
 {
     public class EventRepository : IEventRepository
     {
-        public void AddUsersToEvent(int eventId, List<int> userIds) => EventDAO.Instance.AddUsersToEvent(eventId, userIds);
+        public void AddUsersToEvent(int eventId, List<int> userIds, int loggedInUserId) => EventDAO.Instance.AddUsersToEvent(eventId, userIds, loggedInUserId);
 
         public List<Event> GetAll() => EventDAO.Instance.GetEventList();
 

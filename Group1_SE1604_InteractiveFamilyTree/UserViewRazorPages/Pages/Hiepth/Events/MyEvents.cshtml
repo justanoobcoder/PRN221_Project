@@ -49,15 +49,12 @@
                 <td style="display: flex;">
                     @if (item.Item1.Status.Equals(EventStatus.Waiting.ToString()))
                     {
-                        @if (item.Item2.Equals(UserEventStatus.Pending.ToString()) || item.Item2.Equals(UserEventStatus.Denied.ToString()))
+                        @if (item.Item2.Equals(UserEventStatus.Pending.ToString()))
                         {
                             <form method="post" asp-page-handler="AcceptEvent">
                                 <input type="hidden" name="eventId" value="@item.Item1.EventId" />
                                 <button class="btn btn-primary">Accept</button>
                             </form>
-                        }
-                        @if (item.Item2.Equals(UserEventStatus.Pending.ToString()) || item.Item2.Equals(UserEventStatus.Accepted.ToString()))
-                        {
                             <form method="post" asp-page-handler="DenyEvent">
                                 <input type="hidden" name="eventId" value="@item.Item1.EventId" />
                                 <button class="btn btn-danger">Deny</button>

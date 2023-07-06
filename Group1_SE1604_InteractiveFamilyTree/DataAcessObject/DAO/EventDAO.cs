@@ -143,7 +143,7 @@ namespace DataAccesObject.DAO
             }
         }
 
-        public void AddUsersToEvent(int eventId, List<int> userIds)
+        public void AddUsersToEvent(int eventId, List<int> userIds, int loggedInUserId)
         {
             try
             {
@@ -153,8 +153,10 @@ namespace DataAccesObject.DAO
                     {
                         EventId = eventId,
                         UserId = userId,
-                        Status = UserEventStatus.Pending.ToString(),
-                        View = 0
+                        Status = userId == loggedInUserId ? 
+                            UserEventStatus.Accepted.ToString() :
+                            UserEventStatus.Pending.ToString(),
+                        View = userId == loggedInUserId ? 1 : 0
                     };
                     context.UserJoins.Add(userJoin);
                     context.SaveChanges();
