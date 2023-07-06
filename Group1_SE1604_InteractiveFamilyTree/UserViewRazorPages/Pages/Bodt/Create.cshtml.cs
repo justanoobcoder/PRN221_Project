@@ -45,12 +45,12 @@ namespace UserViewRazorPages.Pages.Bodt
             List<User> doNotIncludedUsers;
             if (SelectedOption.Equals("Option1"))
             {
-                doNotIncludedUsers = userRepository.getMarriedUser(1);
+                doNotIncludedUsers = userRepository.getMarriedUser(loginUser.FamilyId.GetValueOrDefault());
                 
             }
             else
             {
-                doNotIncludedUsers = userRepository.getUnavailable(1);
+                doNotIncludedUsers = userRepository.getUnavailable(loginUser.FamilyId.GetValueOrDefault());
             }
             foreach (var user in users.ToList())
             {

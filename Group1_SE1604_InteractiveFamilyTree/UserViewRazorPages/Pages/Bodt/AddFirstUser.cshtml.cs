@@ -43,6 +43,7 @@ namespace UserViewRazorPages.Pages.Bodt
             User.Gender = (selectedGender == "Male") ? true : false;
             UploadImage(ImageFile);
             User.Code = RandomCodeGenerator.GenerateRandomCode();
+            User.Status = "Using";
             userRepository.AddUser(User);
             int UserId = relationshipRepository.GetMainUser(User.FamilyId.GetValueOrDefault());
             HttpContext.Session.SetInt32("UserId", UserId);

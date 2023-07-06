@@ -15,6 +15,7 @@ namespace UserViewRazorPages.Pages.Bodt
     public class AccountReportListModel : PageModel
     {
         IAccountReportRepository accountReportRepository = new AccountReportRepository();
+        IUserRepository userRepository = new UserRepository();
 
         public IList<AccountReport> AccountReport { get;set; }
 
@@ -24,6 +25,10 @@ namespace UserViewRazorPages.Pages.Bodt
             if (userId == 0)
                 return NotFound();
             AccountReport = accountReportRepository.showAccountReport(userId);
+            foreach (var accountReport in AccountReport)
+            {
+                accountReport.User = userRepository.GetUser(accountReport.UserId);
+            }
             return Page();
         }
     }

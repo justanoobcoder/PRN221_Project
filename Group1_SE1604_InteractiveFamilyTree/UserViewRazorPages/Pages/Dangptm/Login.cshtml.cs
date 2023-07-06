@@ -19,7 +19,7 @@ namespace UserViewRazorPages.Pages.Dangptm
             return Page();
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPostLogin()
         {
             User loginUser = userRepository.Login(User.Email, User.Password);
             if (loginUser == null)
@@ -34,11 +34,6 @@ namespace UserViewRazorPages.Pages.Dangptm
                 return RedirectToPage("/Bodt/MainPage");
             }
 
-        }
-        public IActionResult OnGetLogout()
-        {
-            HttpContext.Session.Remove("UserId");
-            return Page();
         }
     }
 }
