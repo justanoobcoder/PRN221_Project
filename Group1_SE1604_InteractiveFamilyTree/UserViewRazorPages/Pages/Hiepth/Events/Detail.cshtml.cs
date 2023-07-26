@@ -32,7 +32,9 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
             Event = eventRepository.GetByEventId(id);
             Users = eventRepository.GetUsersByEventId(id);
             UserJoin uj = eventRepository.GetUserJoinByUserIdAndEventId(userId.Value, id);
-            if (uj == null && Event.Status.Equals(EventStatus.Waiting.ToString()))
+            if (uj == null && 
+                Event.Status.Equals(EventStatus.Waiting.ToString()) &&
+                eventRepository.IsUserAvailable(userId.Value, Event.StartDate.Value, Event.EndDate.Value))
             {
                 CanJoin = true;
             }

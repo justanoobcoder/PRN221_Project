@@ -22,5 +22,6 @@ namespace Repositories.Hiepth
         void UpdateUserJoin(UserJoin userJoin);
         List<User> GetUsersByEventId(int eventId);
         UserJoin GetUserJoinByUserIdAndEventId(int userId, int eventId);
+        bool IsUserAvailable(int userId, DateTime start, DateTime end);
     }
 }

@@ -34,5 +34,7 @@ namespace Repositories.Hiepth
         public UserJoin GetUserJoinByUserIdAndEventId(int userId, int eventId) => EventDAO.Instance.GetUserJoinByUserIdAndEventId(userId, eventId);
 
         public void Update(Event e) => EventDAO.Instance.Update(e);
+
+        public bool IsUserAvailable(int userId, DateTime start, DateTime end) => EventDAO.Instance.IsUserAvailable(userId, start, end);
     }
 }

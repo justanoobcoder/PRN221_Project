@@ -42,7 +42,10 @@ namespace UserViewRazorPages.Pages.Hiepth.Events
             }
             Event = eventRepository.GetByEventId(eventId);
             int familyId = (int)Event.Creator.FamilyId;
-            Users = userRepository.GetUsersHaveAccountByFamilyId(familyId).Except(AddedUsers, new UserComparer()).ToList();
+            Users = userRepository.GetUsersHaveAccountByFamilyId(familyId)
+                .Where(u => eventRepository.IsUserAvailable(u.UserId, Event.StartDate.Value, Event.EndDate.Value))
+                .Except(AddedUsers, new UserComparer())
+                .ToList();
 
             return Page();
         }

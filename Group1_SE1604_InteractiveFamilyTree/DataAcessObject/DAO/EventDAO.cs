@@ -210,6 +210,20 @@ namespace DataAccesObject.DAO
             {
                 context.Entry(userJoin).State = EntityState.Modified;
                 context.SaveChanges();
+                Event ev = GetByEventId(userJoin.EventId);
+                List<Event> events = GetByUserId(userJoin.UserId).Where(e => e.StartDate > DateTime.Now).ToList();
+                foreach (Event e in events)
+                {
+                    UserJoin uj = GetUserJoinByUserIdAndEventId(userJoin.UserId, e.EventId);
+                    if (uj.Status.Equals(UserEventStatus.Pending.ToString())
+                        && ((e.StartDate > ev.StartDate && e.StartDate < ev.EndDate) ||
+                        e.EndDate > ev.StartDate && e.EndDate < ev.EndDate))
+                    {
+                        uj.Status = UserEventStatus.Denied.ToString();
+                        context.Entry(uj).State = EntityState.Modified;
+                        context.SaveChanges();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -304,6 +318,21 @@ namespace DataAccesObject.DAO
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public bool IsUserAvailable(int userId, DateTime start, DateTime end)
+        {
+            List<Event> events = GetByUserId(userId).Where(e => e.StartDate > DateTime.Now).ToList();
+            foreach (Event e in events)
+            {
+                UserJoin uj = GetUserJoinByUserIdAndEventId(userId, e.EventId);
+                if (uj.Status.Equals(UserEventStatus.Accepted.ToString()) && 
+                    ((e.EndDate > start && e.EndDate < end ) || (e.StartDate > start && e.StartDate < end)))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public List<Event> searchEvent(string search)
